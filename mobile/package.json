@@ -1,0 +1,11 @@
+{
+  "name": "mobile",
+  "version": "0.0.1",
+  "description": "Echo mobile app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "James Roger",
+  "license": "MIT"
+}

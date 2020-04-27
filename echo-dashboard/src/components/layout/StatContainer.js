@@ -1,27 +1,23 @@
 import React from "react";
 import styled from "styled-components";
-import Heading from "../layout/Heading";
 
 const StyledStatsContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.lightBlue};
   border-radius: ${({ theme }) => theme.radius.medium};
   width: 400px;
   height: 300px;
-  margin-left: 50px;
-  margin-top: 50px;
+  box-shadow: ${({ theme }) => theme.shadow.light};
+
+  & div {
+    margin: 20px;
+  }
 `;
 
-const StyledContent = styled.div`
-  margin: 20px;
-`;
-
-const UserStats = () => {
+const StatContainer = ({ children }) => {
   return (
     <StyledStatsContainer>
-      <StyledContent>
-        <Heading>Users</Heading>
-      </StyledContent>
+      <div>{children}</div>
     </StyledStatsContainer>
   );
 };
-export default UserStats;
+export default StatContainer;

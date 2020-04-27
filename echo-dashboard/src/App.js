@@ -11,7 +11,10 @@ import SideBar from "./components/layout/SideBar";
 import SideBarItem from "./components/layout/SideBarItem";
 import DashboardContainer from "./components/layout/DashboardContainer";
 import Logo from "./components/layout/Logo";
-import UserStats from "./components/stats/UserStats";
+import UserStats from "./components/users/UserStats";
+import UserAlerts from "./components/alerts/UserAlets";
+import UserMessages from "./components/messages/UserMessages";
+import DashboardMap from "./components/map/DashboardMap";
 
 function App() {
   return (
@@ -36,6 +39,9 @@ function App() {
         </SideBar>
         <DashboardContainer>
           <UserStats />
+          <UserMessages />
+          <UserAlerts />
+          <DashboardMap />
         </DashboardContainer>
       </Wrapper>
     </div>

@@ -13,4 +13,8 @@ export default {
     medium: "20px",
     large: "30px",
   },
+  shadow: {
+    light: "0 10px 40px rgba(0, 0, 0, 0.08)",
+    strong: "0 10px 40px rgba(0, 0, 0, 0.5)",
+  },
 };

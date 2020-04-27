@@ -12,7 +12,6 @@ const NavBar = styled.div`
   width: 100px;
   height: 100vh;
   border-top-right-radius: ${({ theme }) => theme.radius.medium};
-  border-bottom-right-radius: ${({ theme }) => theme.radius.medium};
   justify-content: center;
   text-align: center;
 `;

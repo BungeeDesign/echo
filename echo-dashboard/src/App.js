@@ -11,6 +11,7 @@ import SideBar from "./components/layout/SideBar";
 import SideBarItem from "./components/layout/SideBarItem";
 import DashboardContainer from "./components/layout/DashboardContainer";
 import Logo from "./components/layout/Logo";
+import UserStats from "./components/stats/UserStats";
 
 function App() {
   return (
@@ -33,7 +34,9 @@ function App() {
             <FontAwesomeIcon icon={faCog} />
           </SideBarItem>
         </SideBar>
-        <DashboardContainer></DashboardContainer>
+        <DashboardContainer>
+          <UserStats />
+        </DashboardContainer>
       </Wrapper>
     </div>
   );

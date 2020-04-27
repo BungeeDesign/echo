@@ -5,6 +5,9 @@ export default {
     lightOrange: "#F6996A",
     darkOrange: "#E47756",
   },
+  fonts: {
+    heading: "Montserrat",
+  },
   radius: {
     small: "10px",
     medium: "20px",

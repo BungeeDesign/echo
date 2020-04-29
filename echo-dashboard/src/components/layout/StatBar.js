@@ -4,12 +4,12 @@ import styled, { keyframes } from "styled-components";
 const load = keyframes`
   0% {
     transform-origin: left;
-    transform: scaleX(0);
+    width: 0%;
   }
 
   100% {
     transform-origin: left;
-    transform: scaleX(1);
+    width: ${({ percent }) => percent}%;
   }
 `;
 

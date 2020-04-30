@@ -34,7 +34,7 @@ const MapModal = ({
 
   useEffect(() => {
     calculateStats();
-  });
+  }, []);
 
   const calculateStats = () => {
     switch (status.food) {

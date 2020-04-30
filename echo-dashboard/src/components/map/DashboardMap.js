@@ -33,9 +33,17 @@ const DashboardMap = () => {
   const userContext = useContext(UserContext);
   const { getUsers, users } = userContext;
 
+  // ToDo - Implement a real-time API / Socket Connection
+  /**
+   * Very simple to do - On the sos update route/endpoint as soon as a request is made emit from the socket and listen here within
+   * use effect to request the updated data.
+   */
   useEffect(() => {
     getUsers();
-  }, [getUsers, users]);
+    setInterval(() => {
+      getUsers();
+    }, 5000);
+  }, []);
 
   const renderModal = () => {
     return (

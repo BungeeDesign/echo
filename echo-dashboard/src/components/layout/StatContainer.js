@@ -1,22 +1,26 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 const StyledStatsContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.lightBlue};
   border-radius: ${({ theme }) => theme.radius.medium};
-  width: 400px;
+  width: 500px;
   height: 300px;
   box-shadow: ${({ theme }) => theme.shadow.light};
 
-  & div {
+  .stats-wrapper {
     margin: 20px;
+    display: grid;
+    justify-content: center;
+    grid-template-columns: 1fr;
+    grid-template-rows: 55px 60px auto;
   }
 `;
 
 const StatContainer = ({ children }) => {
   return (
     <StyledStatsContainer>
-      <div>{children}</div>
+      <div className="stats-wrapper">{children}</div>
     </StyledStatsContainer>
   );
 };

@@ -1,9 +1,10 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import ReactMapGL, { Marker, Popup, NavigationControl } from "react-map-gl";
-import Pin from "./Pin";
-import UserPin from "./UserPin";
-import MapModal from "./MapModal";
+import React, { useState, useContext, useEffect } from 'react';
+import UserContext from '../../context/user/userConext';
+import styled from 'styled-components';
+import ReactMapGL, { Marker, Popup, NavigationControl } from 'react-map-gl';
+import Pin from './Pin';
+import UserPin from './UserPin';
+import MapModal from './MapModal';
 
 const StyledContainer = styled.div`
   width: 100%;
@@ -17,8 +18,8 @@ const StyledContainer = styled.div`
 const DashboardMap = () => {
   // Compoenent State
   const [viewport, setViewport] = useState({
-    width: "100%",
-    height: "100%",
+    width: '100%',
+    height: '100%',
     latitude: 10.550231,
     longitude: 107.552053,
     zoom: 15,
@@ -28,113 +29,13 @@ const DashboardMap = () => {
   const [popupLong, setPopupLong] = useState(0);
   const [popupUser, setPopupUser] = useState({});
 
-  // Temp Mocked JSON API Data
-  const tempUsers = [
-    {
-      userDetails: {
-        name: "Ananada",
-        location: {
-          lat: 10.557,
-          long: 107.54,
-        },
-        age: 34,
-        gender: "Female",
-        pregnant: false,
-        adultsWith: 1,
-        minorsWith: 0,
-      },
-      stats: {
-        food: "Medium",
-        health: {
-          complications: ["Fractured Leg", "Heart Condition"],
-        },
-        shelter: true,
-        trapped: false,
-      },
-      sos: {
-        active: true,
-        message: "Having trouble breathing",
-      },
-    },
-    {
-      userDetails: {
-        name: "Charong",
-        location: {
-          lat: 10.554,
-          long: 107.545,
-        },
-        age: 34,
-        gender: "Male",
-        pregnant: false,
-        adultsWith: 1,
-        minorsWith: 0,
-      },
-      stats: {
-        food: "Medium",
-        health: {
-          complications: ["Fractured Leg", "Heart Condition"],
-        },
-        shelter: true,
-        trapped: false,
-      },
-      sos: {
-        active: true,
-        message: "Having trouble breathing",
-      },
-    },
-    {
-      userDetails: {
-        name: "Isra",
-        location: {
-          lat: 10.551,
-          long: 107.54,
-        },
-        age: 34,
-        gender: "Female",
-        pregnant: false,
-        adultsWith: 1,
-        minorsWith: 0,
-      },
-      stats: {
-        food: "High",
-        health: {
-          complications: ["Fractured Leg", "Heart Condition"],
-        },
-        shelter: true,
-        trapped: false,
-      },
-      sos: {
-        active: true,
-        message: "Having trouble breathing",
-      },
-    },
-    {
-      userDetails: {
-        name: "Kiet",
-        location: {
-          lat: 10.557,
-          long: 107.552053,
-        },
-        age: 34,
-        gender: "Male",
-        pregnant: false,
-        adultsWith: 1,
-        minorsWith: 0,
-      },
-      stats: {
-        food: "Low",
-        health: {
-          complications: ["Fractured Leg", "Heart Condition"],
-        },
-        shelter: true,
-        trapped: false,
-      },
-      sos: {
-        active: true,
-        message: "Having trouble breathing",
-      },
-    },
-  ];
+  // User Context
+  const userContext = useContext(UserContext);
+  const { getUsers, users } = userContext;
+
+  useEffect(() => {
+    getUsers();
+  }, [getUsers, users]);
 
   const renderModal = () => {
     return (
@@ -165,10 +66,11 @@ const DashboardMap = () => {
           <Pin onClick={() => setMapModal((mapModal) => !mapModal)} />
         </Marker>
 
-        {tempUsers.map((user) => (
+        {users.map((user) => (
           <Marker
             latitude={user.userDetails.location.lat}
             longitude={user.userDetails.location.long}
+            key={user._id}
           >
             <UserPin
               onClick={() => {

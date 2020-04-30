@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLemon, faHeartbeat } from "@fortawesome/free-solid-svg-icons";
-import styled, { keyframes } from "styled-components";
-import Heading from "../layout/Heading";
-import StatBar from "../layout/StatBar";
+import React, { useState, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLemon, faHeartbeat } from '@fortawesome/free-solid-svg-icons';
+import styled, { keyframes } from 'styled-components';
+import Heading from '../layout/Heading';
+import StatBar from '../layout/StatBar';
 
 const transitionIn = keyframes`
   0% {
@@ -34,18 +34,18 @@ const MapModal = ({
 
   useEffect(() => {
     calculateStats();
-  }, []);
+  });
 
   const calculateStats = () => {
     switch (status.food) {
-      case "Low":
-        setFood((food) => 30);
+      case 'Low':
+        setFood(30);
         break;
-      case "Medium":
-        setFood((food) => 50);
+      case 'Medium':
+        setFood(50);
         break;
-      case "High":
-        setFood((food) => 100);
+      case 'High':
+        setFood(100);
         break;
       default:
         break;
@@ -53,13 +53,13 @@ const MapModal = ({
 
     switch (status.health.complications.length) {
       case 0:
-        setHealth((food) => 100);
+        setHealth(100);
         break;
       case 1:
-        setHealth((food) => 50);
+        setHealth(50);
         break;
       case 2:
-        setHealth((food) => 30);
+        setHealth(30);
         break;
       default:
         break;

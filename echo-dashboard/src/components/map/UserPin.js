@@ -1,20 +1,15 @@
-import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
-import styled, { keyframes } from "styled-components";
+import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
+import styled, { css, keyframes } from 'styled-components';
 
-const sos = keyframes`
+const sosFlash = keyframes`
   0% {
-    transform: scale(0);
-  }
-
-  50% {
-    opacity: 0.5;
+    box-shadow: 0 0 35px 0px rgb(255, 0, 0, 0.8);
   }
 
   100% {
-    opacity: 0;
-    transform: scale(1.7);
+    box-shadow: 0 0 35px 15px rgb(255, 0, 0, 0.8);
   }
 `;
 
@@ -35,11 +30,18 @@ const StyledPin = styled.div`
   &:hover {
     transform: scale(1.2);
   }
+
+  ${({ sos }) =>
+    sos &&
+    css`
+      color: rgb(255, 0, 0, 0.8);
+      animation: ${sosFlash} 0.8s ease infinite alternate-reverse;
+    `}
 `;
 
-const UserPin = ({ onClick }) => {
+const UserPin = ({ onClick, sos }) => {
   return (
-    <StyledPin onClick={onClick}>
+    <StyledPin onClick={onClick} sos={sos}>
       <FontAwesomeIcon icon={faUser} />
     </StyledPin>
   );

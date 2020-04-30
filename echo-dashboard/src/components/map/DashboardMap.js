@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import UserContext from '../../context/user/userConext';
 import styled from 'styled-components';
-import ReactMapGL, { Marker, Popup, NavigationControl } from 'react-map-gl';
+import ReactMapGL, { Marker, Popup } from 'react-map-gl';
 import Pin from './Pin';
 import UserPin from './UserPin';
 import MapModal from './MapModal';
@@ -86,6 +86,7 @@ const DashboardMap = () => {
                   },
                 });
               }}
+              sos={user.sos.active}
             />
           </Marker>
         ))}

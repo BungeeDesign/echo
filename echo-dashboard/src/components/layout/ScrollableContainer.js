@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useRef, useEffect, useContext } from 'react';
+import UserContext from '../../context/user/userConext';
 import styled from 'styled-components';
 
 const StyledScroll = styled.div`
@@ -25,6 +26,23 @@ const StyledScroll = styled.div`
 `;
 
 const ScrollableContainer = ({ children }) => {
-  return <StyledScroll>{children}</StyledScroll>;
+  const scrollContainer = useRef(null);
+
+  const userContext = useContext(UserContext);
+  const { scrollPosition } = userContext;
+
+  useEffect(() => {
+    getScrollData();
+  });
+
+  const getScrollData = () => {
+    scrollContainer.current.scroll({
+      top: scrollPosition,
+      left: 0,
+      behavior: 'smooth',
+    });
+  };
+
+  return <StyledScroll ref={scrollContainer}>{children}</StyledScroll>;
 };
 export default ScrollableContainer;

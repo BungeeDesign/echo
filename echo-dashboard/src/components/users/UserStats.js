@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
+import UserContext from '../../context/user/userConext';
 import styled from 'styled-components';
 import Heading from '../layout/Heading';
 import StatContainer from '../layout/StatContainer';
@@ -12,13 +13,23 @@ const StatCounter = styled.div`
 `;
 
 const UserStats = () => {
+  // User Context
+  const userContext = useContext(UserContext);
+  const { getUsers, users } = userContext;
+
+  useEffect(() => {
+    getUsers();
+  }, []);
+
   return (
     <StatContainer>
       <Heading>Users</Heading>
-      <StatCounter>10 Active</StatCounter>
+      <StatCounter>{users.length} Active</StatCounter>
 
       <ScrollableContainer>
-        <StatItem />
+        {users.map((user) => (
+          <StatItem key={user._id} user={user} />
+        ))}
       </ScrollableContainer>
     </StatContainer>
   );

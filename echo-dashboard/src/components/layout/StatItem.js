@@ -35,45 +35,66 @@ const StyledItem = styled.div`
   }
 `;
 
-const StatItem = () => {
+const StatItem = ({
+  user: {
+    userDetails: { gender, pregnant, name, age, adultsWith, minorsWith },
+    stats: {
+      health: { complications },
+      food,
+      shelter,
+      trapped,
+    },
+    sos: { active, message },
+  },
+}) => {
+  const formatComplications = () => {
+    if (complications.length > 1) {
+      return `${complications[1]} +${complications.length - 1}`;
+    } else if (complications.length === 0) {
+      return '0';
+    } else {
+      return complications;
+    }
+  };
+
   return (
     <StyledItem>
       <div className="name-title">
-        <strong>James</strong>
+        <strong>{name}</strong>
       </div>
       <div className="item-container">
         <FontAwesomeIcon icon={faBirthdayCake} />
         <Heading small subtle>
-          34
+          {age}
         </Heading>
         <FontAwesomeIcon icon={faVenusMars} />
         <Heading small subtle>
-          Male
+          {gender}
         </Heading>
 
         <FontAwesomeIcon icon={faNotesMedical} />
         <Heading small subtle>
-          Fractured Foot
+          {formatComplications()}
         </Heading>
         <FontAwesomeIcon icon={faBaby} />
         <Heading small subtle>
-          1
+          {pregnant ? 'Pregnant' : minorsWith}
         </Heading>
         <FontAwesomeIcon icon={faUser} />
         <Heading small subtle>
-          0
+          {adultsWith}
         </Heading>
         <FontAwesomeIcon icon={faPizzaSlice} />
         <Heading small subtle>
-          High
+          {food}
         </Heading>
         <FontAwesomeIcon icon={faHouseUser} />
         <Heading small subtle>
-          Has Shelter
+          {shelter ? 'Has Shelter' : 'No Shelter'}
         </Heading>
         <FontAwesomeIcon icon={faLifeRing} />
         <Heading small subtle>
-          SOS Not Active
+          {active ? 'SOS Active' : 'SOS Not Active'}
         </Heading>
       </div>
     </StyledItem>

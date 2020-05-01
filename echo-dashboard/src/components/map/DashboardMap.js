@@ -31,7 +31,7 @@ const DashboardMap = () => {
 
   // User Context
   const userContext = useContext(UserContext);
-  const { getUsers, users } = userContext;
+  const { getUsers, users, setScrollPosition } = userContext;
 
   // ToDo - Implement a real-time API / Socket Connection
   /**
@@ -40,9 +40,9 @@ const DashboardMap = () => {
    */
   useEffect(() => {
     getUsers();
-    setInterval(() => {
-      getUsers();
-    }, 5000);
+    // setInterval(() => {
+    //   getUsers();
+    // }, 5000);
   }, []);
 
   const renderModal = () => {
@@ -61,6 +61,10 @@ const DashboardMap = () => {
     );
   };
 
+  const caclulateScroll = (i) => {
+    setScrollPosition(150 * i);
+  };
+
   return (
     <StyledContainer>
       <ReactMapGL
@@ -74,11 +78,12 @@ const DashboardMap = () => {
           <Pin onClick={() => setMapModal((mapModal) => !mapModal)} />
         </Marker>
 
-        {users.map((user) => (
+        {users.map((user, index) => (
           <Marker
             latitude={user.userDetails.location.lat}
             longitude={user.userDetails.location.long}
             key={user._id}
+            index={index}
           >
             <UserPin
               onClick={() => {
@@ -93,6 +98,7 @@ const DashboardMap = () => {
                     status: user.stats,
                   },
                 });
+                caclulateScroll(index);
               }}
               sos={user.sos.active}
             />

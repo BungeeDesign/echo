@@ -5,6 +5,7 @@ import ReactMapGL, { Marker, Popup } from 'react-map-gl';
 import Pin from './Pin';
 import UserPin from './UserPin';
 import MapModal from './MapModal';
+import InsightIcon from '../insights/InsightIcon';
 
 const StyledContainer = styled.div`
   width: 100%;
@@ -67,6 +68,7 @@ const DashboardMap = () => {
 
   return (
     <StyledContainer>
+      <InsightIcon />
       <ReactMapGL
         {...viewport}
         mapStyle="mapbox://styles/mapbox/satellite-v9"
@@ -74,7 +76,7 @@ const DashboardMap = () => {
         onViewportChange={setViewport}
       >
         {renderModal()}
-        <Marker latitude={10.554} longitude={107.552053}>
+        <Marker latitude={10.556} longitude={107.547}>
           <Pin onClick={() => setMapModal((mapModal) => !mapModal)} />
         </Marker>
 

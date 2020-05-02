@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -39,6 +39,15 @@ const GlobalStyle = createGlobalStyle`
   }
 
   .mapboxgl-popup-close-button {
+    display: none;
+  }
+
+  /* MapBox Logos/Lables - This is agasit ToS (Applied for educational purposes only) */
+  .mapboxgl-ctrl-bottom-right {
+    display: none;
+  }
+
+  .mapboxgl-ctrl-bottom-left {
     display: none;
   }
 `;

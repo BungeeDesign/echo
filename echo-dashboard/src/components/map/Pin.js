@@ -1,5 +1,6 @@
-import React from "react";
-import styled, { keyframes } from "styled-components";
+import React from 'react';
+import styled, { keyframes } from 'styled-components';
+import echoHub from '../../assets/images/echo-hub.png';
 
 const pulse = keyframes`
   0% {
@@ -17,15 +18,17 @@ const pulse = keyframes`
 `;
 
 const StyledPin = styled.div`
-  width: 50px;
-  height: 50px;
-  border-radius: 100px;
-  background-color: white;
-  animation: ${pulse} 2.5s ease infinite;
+  .echo-hub {
+    width: 60px;
+  }
 `;
 
 const Pin = ({ onClick }) => {
-  return <StyledPin onClick={onClick}></StyledPin>;
+  return (
+    <StyledPin onClick={onClick}>
+      <img src={echoHub} className="echo-hub" />
+    </StyledPin>
+  );
 };
 
 export default Pin;

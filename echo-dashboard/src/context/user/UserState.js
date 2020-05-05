@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useCallback } from 'react';
 import API from '../../utils/API';
 import UserContext from './userConext';
 import UserReducer from './userReducer';
@@ -13,14 +13,23 @@ const UserState = (props) => {
   const [state, dispatch] = useReducer(UserReducer, initialState);
 
   // Get Users
-  const getUsers = async () => {
+  // const getUsers = async () => {
+  // const res = await API.get('users');
+
+  // dispatch({
+  //   type: GET_USERS,
+  //   payload: res.data,
+  // });
+  // };
+
+  const getUsers = useCallback(async () => {
     const res = await API.get('users');
 
     dispatch({
       type: GET_USERS,
       payload: res.data,
     });
-  };
+  }, [initialState.users]);
 
   /**
    * @Todo Component Actions - Refactor to another context potentially? Non API based

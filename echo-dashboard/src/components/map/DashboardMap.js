@@ -41,9 +41,7 @@ const DashboardMap = () => {
    */
   useEffect(() => {
     getUsers();
-    // setInterval(() => {
-    //   getUsers();
-    // }, 5000);
+    console.log('Get Users Render...');
   }, []);
 
   const renderModal = () => {
@@ -68,7 +66,7 @@ const DashboardMap = () => {
 
   return (
     <StyledContainer>
-      <InsightIcon />
+      <InsightIcon users={users} />
       <ReactMapGL
         {...viewport}
         mapStyle="mapbox://styles/mapbox/satellite-v9"

@@ -6,7 +6,6 @@ import EchoButtonGesture from '../Buttons/EchoButtonGesture';
 import Theme from '../../../constants/Theme';
 
 export const TabBar = ({ state, descriptors, navigation }) => {
-  console.log(state, descriptors, navigation);
   return (
     <View style={[styles.container, { width: '100%' }]}>
       <View
@@ -25,7 +24,7 @@ export const TabBar = ({ state, descriptors, navigation }) => {
               : route.name;
 
           const isFocused = state.index === index;
-          console.log(options, route.name);
+
           const onPress = () => {
             const event = navigation.emit({
               type: 'tabPress',
@@ -45,35 +44,18 @@ export const TabBar = ({ state, descriptors, navigation }) => {
             });
           };
 
-          if (route.name !== 'font') {
-            return (
-              <TouchableOpacity
-                key={index}
-                stlye={{
-                  flex: 1,
-                }}
-              >
-                <TabBarIcon focused={isFocused} name={route.name} />
-              </TouchableOpacity>
-            );
-          } else {
-            return <EchoButtonGesture key={index} />;
-          }
-          // return (
-          // <TouchableOpacity
-          //   accessibilityRole="button"
-          //   accessibilityStates={isFocused ? ['selected'] : []}
-          //   accessibilityLabel={options.tabBarAccessibilityLabel}
-          //   testID={options.tabBarTestID}
-          //   onPress={onPress}
-          //   onLongPress={onLongPress}
-          //   style={{ flex: 1 }}
-          //   key={index}
-          // >
-          //   {label.toString === 'echo' && <TestButton />}
-
-          // </TouchableOpacity>
-          // );
+          return (
+            <TouchableOpacity
+              accessibilityRole="button"
+              onPress={onPress}
+              key={index}
+              stlye={{
+                flex: 1,
+              }}
+            >
+              <TabBarIcon focused={isFocused} name={route.name} />
+            </TouchableOpacity>
+          );
         })}
       </View>
     </View>

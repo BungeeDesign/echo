@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import Theme from '../constants/Theme';
 import Svg, { Path } from 'react-native-svg';
+import EchoButtonGesture from '../components/Layout/Buttons/EchoButtonGesture';
 
 export default function HomeScreen() {
   return (
@@ -23,6 +24,7 @@ export default function HomeScreen() {
       <Text style={{ color: 'white', marginTop: 20 }}>
         Echo. Humanitarian Communication.
       </Text>
+      {/* <EchoButtonGesture /> */}
     </View>
   );
 }

@@ -6,6 +6,7 @@ import CircularProgress from '../../../utils/CircularProgress';
 import Theme from '../../../constants/Theme';
 import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Path } from 'react-native-svg';
+import * as Haptics from 'expo-haptics';
 
 const SIZE = 80;
 const STROKE_WIDTH = 10;
@@ -23,6 +24,10 @@ export const EchoButton = ({ progress }) => {
       ),
     [progress]
   );
+
+  if (active) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+  }
 
   return (
     <View style={{ bottom: 30 }}>

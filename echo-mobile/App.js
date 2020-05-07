@@ -44,11 +44,11 @@ export default function App(props) {
     return (
       <View style={styles.container}>
         {Platform.OS === 'ios' && <StatusBar barStyle="light-content" />}
-        <NavigationContainer>
-          <SafeAreaProvider>
+        <SafeAreaProvider>
+          <NavigationContainer>
             <BottomMenu />
-          </SafeAreaProvider>
-        </NavigationContainer>
+          </NavigationContainer>
+        </SafeAreaProvider>
       </View>
     );
   }

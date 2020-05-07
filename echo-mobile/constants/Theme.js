@@ -11,7 +11,8 @@ export default {
     subtleWhite: 'rgba(0, 0, 0, 0.59)',
   },
   fonts: {
-    heading: 'Montserrat',
+    heading: 'montserrat-semi-bold',
+    body: 'montserrat',
   },
   radius: {
     small: '10px',

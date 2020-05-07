@@ -1,8 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import Theme from '../constants/Theme';
-import { Button } from '../components/Layout/Buttons/Button';
-import TestButton from '../components/TestButton';
 import Svg, { Path } from 'react-native-svg';
 
 export default function HomeScreen() {

@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { width } from '../../../constants/Layout';
 import TabBarIcon from '../../../components/TabBarIcon';
-import TestButton from '../../../components/TestButton';
+import EchoButtonGesture from '../Buttons/EchoButtonGesture';
 import Theme from '../../../constants/Theme';
 
 export const TabBar = ({ state, descriptors, navigation }) => {
@@ -57,7 +57,7 @@ export const TabBar = ({ state, descriptors, navigation }) => {
               </TouchableOpacity>
             );
           } else {
-            return <TestButton key={index} />;
+            return <EchoButtonGesture key={index} />;
           }
           // return (
           // <TouchableOpacity

@@ -9,9 +9,8 @@ import {
   withTransition,
   withSpringTransition,
 } from 'react-native-redash';
-import Button from '../components/Layout/Buttons/Button';
-import Theme from '../constants/Theme';
-import { AnotherOne } from './Layout/Buttons/AnotherOne';
+import Theme from '../../../constants/Theme';
+import { EchoButton } from './EchoButton';
 
 export default function TestButton({ name, focused }) {
   const state = new Value(State.UNDETERMINED);
@@ -25,7 +24,7 @@ export default function TestButton({ name, focused }) {
     <View style={styles.buttonContainer}>
       <TapGestureHandler {...gestureHandler}>
         <Animated.View style={{ transform: [{ scale }] }}>
-          <AnotherOne {...{ progress }} />
+          <EchoButton {...{ progress }} />
         </Animated.View>
       </TapGestureHandler>
     </View>

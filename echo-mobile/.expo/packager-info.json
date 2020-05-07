@@ -1,0 +1,10 @@
+{
+  "devToolsPort": 19002,
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 42933,
+  "expoServerNgrokUrl": "https://qz-yap.anonymous.echo-mobile.exp.direct",
+  "packagerNgrokUrl": "https://packager.qz-yap.anonymous.echo-mobile.exp.direct",
+  "ngrokPid": 42943,
+  "webpackServerPort": null
+}

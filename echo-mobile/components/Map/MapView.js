@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, MaskedViewIOS } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { View, StyleSheet, MaskedViewIOS, LayoutAnimation } from 'react-native';
 import MapView from 'react-native-maps';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Theme from '../../constants/Theme';
 
 export const Map = () => {
+  const ref = useRef(null);
+
   const [region, setRegion] = useState({
     latitude: 51.5079145,
     longitude: -0.0899163,
@@ -13,13 +15,24 @@ export const Map = () => {
     longitudeDelta: 0.01,
   });
 
+  const [mapExpanded, setMapExpanded] = useState(400);
+
+  const onExpand = () => {
+    if (mapExpanded === 800) {
+      setMapExpanded(400);
+    } else {
+      setMapExpanded(800);
+    }
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+  };
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container]}>
       <View
         style={{
           width: '100%',
           position: 'absolute',
-          bottom: 5,
+          bottom: mapExpanded === 800 ? 100 : 5,
           justifyContent: 'center',
           alignItems: 'center',
           zIndex: 10,
@@ -27,10 +40,11 @@ export const Map = () => {
         }}
       >
         <FontAwesome5
-          name={'plus-circle'}
+          onPress={onExpand}
+          name={mapExpanded === 800 ? 'minus-circle' : 'plus-circle'}
           size={25}
           style={{
-            color: 'white',
+            color: Theme.colors.lightOrange,
           }}
         />
       </View>
@@ -41,14 +55,14 @@ export const Map = () => {
           <LinearGradient
             pointerEvents="none"
             colors={['rgba(255,255,255,0.1)', Theme.colors.blue]}
-            style={styles.gradient}
+            style={[styles.gradient, { top: mapExpanded - 50 }]}
           />
         }
       >
-        <View style={styles.mask}></View>
+        <View style={[styles.mask, { height: mapExpanded }]}></View>
       </MaskedViewIOS>
       <MapView
-        style={styles.map}
+        style={[styles.map, { height: mapExpanded }]}
         initialRegion={region}
         mapType="satellite"
       ></MapView>
@@ -58,18 +72,14 @@ export const Map = () => {
 
 const styles = StyleSheet.create({
   container: {
-    // position: 'absolute',
     flex: 0,
-    // top: 0,
     width: '100%',
-    height: 400,
     overflow: 'hidden',
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
   },
   map: {
     width: '100%',
-    height: 400,
   },
   gradient: {
     position: 'absolute',
@@ -82,7 +92,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 3,
     width: '100%',
-    height: 400,
     top: 0,
     opacity: 0.8,
     backgroundColor: Theme.colors.blue,

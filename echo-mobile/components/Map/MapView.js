@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, MaskedViewIOS } from 'react-native';
 import MapView from 'react-native-maps';
 import { LinearGradient } from 'expo-linear-gradient';
+import { FontAwesome5 } from '@expo/vector-icons';
 import Theme from '../../constants/Theme';
 
 export const Map = () => {
@@ -14,6 +15,25 @@ export const Map = () => {
 
   return (
     <View style={styles.container}>
+      <View
+        style={{
+          width: '100%',
+          position: 'absolute',
+          bottom: 5,
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 10,
+          opacity: 0.5,
+        }}
+      >
+        <FontAwesome5
+          name={'plus-circle'}
+          size={25}
+          style={{
+            color: 'white',
+          }}
+        />
+      </View>
       <MaskedViewIOS
         pointerEvents="none"
         style={{ zIndex: 9 }}
@@ -38,8 +58,9 @@ export const Map = () => {
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    top: 0,
+    // position: 'absolute',
+    flex: 0,
+    // top: 0,
     width: '100%',
     height: 400,
     overflow: 'hidden',

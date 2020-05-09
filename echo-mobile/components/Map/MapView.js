@@ -1,16 +1,18 @@
 import React, { useRef, useState } from 'react';
 import { View, StyleSheet, MaskedViewIOS, LayoutAnimation } from 'react-native';
-import MapView from 'react-native-maps';
+import MapView, { Marker, Callout } from 'react-native-maps';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Theme from '../../constants/Theme';
+import { UserPin } from '../Map/UserPin';
+import { BlurView } from 'expo-blur';
 
 export const Map = () => {
   const ref = useRef(null);
 
   const [region, setRegion] = useState({
-    latitude: 51.5079145,
-    longitude: -0.0899163,
+    latitude: 10.550231,
+    longitude: 107.552053,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   });
@@ -44,7 +46,7 @@ export const Map = () => {
           name={mapExpanded === 800 ? 'minus-circle' : 'plus-circle'}
           size={25}
           style={{
-            color: Theme.colors.lightOrange,
+            color: 'white',
           }}
         />
       </View>
@@ -65,7 +67,22 @@ export const Map = () => {
         style={[styles.map, { height: mapExpanded }]}
         initialRegion={region}
         mapType="satellite"
-      ></MapView>
+      >
+        <Marker
+          coordinate={{
+            latitude: 10.557,
+            longitude: 107.54,
+          }}
+          calloutOffset={{ x: 80, y: 130 }}
+        >
+          <UserPin />
+          <Callout tooltip>
+            <BlurView intensity={90} tint="dark" style={styles.blurCallout}>
+              <View style={styles.blurColour}></View>
+            </BlurView>
+          </Callout>
+        </Marker>
+      </MapView>
     </View>
   );
 };
@@ -95,5 +112,18 @@ const styles = StyleSheet.create({
     top: 0,
     opacity: 0.8,
     backgroundColor: Theme.colors.blue,
+  },
+  blurCallout: {
+    width: 200,
+    height: 120,
+    borderRadius: 20,
+  },
+  blurColour: {
+    width: 200,
+    height: 120,
+    borderRadius: 20,
+    backgroundColor: Theme.colors.blue,
+    opacity: 0.4,
+    // position: 'absolute'
   },
 });

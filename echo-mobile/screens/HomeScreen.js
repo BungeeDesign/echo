@@ -33,7 +33,6 @@ const styles = StyleSheet.create({
   },
   recentMessagesContainer: {
     flex: 1,
-    // marginTop: 400,
     padding: 20,
     alignItems: 'flex-start',
   },

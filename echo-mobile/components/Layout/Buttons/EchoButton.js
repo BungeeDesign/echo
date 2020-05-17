@@ -96,6 +96,7 @@ export const EchoButton = ({ progress }) => {
         <LottieView
           ref={pulseAnimation}
           source={require('../../../assets/animations/sos-pulse.json')}
+          speed={2}
         />
       </View>
     </View>

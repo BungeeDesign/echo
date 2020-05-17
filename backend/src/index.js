@@ -1,4 +1,8 @@
+// eslint-disable-next-line import/newline-after-import
 const express = require('express');
+const app = express();
+const server = require('http').createServer(app);
+const io = require('socket.io').listen(server);
 const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
@@ -8,7 +12,8 @@ require('dotenv').config();
 
 const middlewares = require('./middlewares');
 
-const app = express();
+// Set Socket IO to the app object for use within API routes
+app.set('io', io);
 
 // Connect to MongoDB (Atlas)
 mongoose.connect(process.env.DATABASE_URL, {
@@ -34,7 +39,7 @@ app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
 
 const port = process.env.PORT || 1255;
-app.listen(port, () => {
+server.listen(port, () => {
   // eslint-disable-next-line no-console
-  console.log(`Listening at http://localhost:${port}`);
+  console.log(`Listening at http://127.0.0.1:${port}`);
 });

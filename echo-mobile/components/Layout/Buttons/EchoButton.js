@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { View, StyleSheet } from 'react-native';
 import Animated, { call, cond, eq, useCode } from 'react-native-reanimated';
 import { mix } from 'react-native-redash';
@@ -7,6 +7,9 @@ import Theme from '../../../constants/Theme';
 import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Path } from 'react-native-svg';
 import * as Haptics from 'expo-haptics';
+import API from '../../../utils/API';
+import LottieView from 'lottie-react-native';
+import { Audio } from 'expo-av';
 
 const SIZE = 80;
 const STROKE_WIDTH = 10;
@@ -15,6 +18,7 @@ const CONTENT_SIZE = SIZE - STROKE_WIDTH * 2;
 
 export const EchoButton = ({ progress }) => {
   const [active, setActive] = useState(false);
+  const pulseAnimation = useRef(null);
 
   useCode(
     () =>
@@ -25,8 +29,35 @@ export const EchoButton = ({ progress }) => {
     [progress]
   );
 
+  const triggerSOS = async () => {
+    try {
+      console.log('API REq');
+      const res = await API.post('users/sos');
+    } catch (error) {
+      console.log('[Echo Button] - Request Error');
+    }
+
+    // Play the SOS Audio
+    const soundObject = new Audio.Sound();
+    try {
+      await soundObject.loadAsync(
+        require('../../../assets/audio/sos-alarm.mp3')
+      );
+      await soundObject.setIsLoopingAsync(true);
+      await soundObject.playAsync();
+    } catch (error) {
+      console.log('[Audio Error] - SOS audio could not be played.');
+    }
+  };
+
   if (active) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+
+    // Trigger Alert via API Call
+    triggerSOS();
+
+    // Play the SOS Animation
+    pulseAnimation.current.play();
   }
 
   return (
@@ -60,6 +91,12 @@ export const EchoButton = ({ progress }) => {
             style={styles.gradient}
           />
         </View>
+      </View>
+      <View style={styles.pulseAnimation}>
+        <LottieView
+          ref={pulseAnimation}
+          source={require('../../../assets/animations/sos-pulse.json')}
+        />
       </View>
     </View>
   );
@@ -105,5 +142,13 @@ const styles = StyleSheet.create({
     left: (CONTENT_SIZE - 20) / 2,
     position: 'absolute',
     zIndex: 300,
+  },
+  pulseAnimation: {
+    zIndex: -2,
+    width: 300,
+    height: 200,
+    position: 'absolute',
+    left: -110,
+    top: -60,
   },
 });

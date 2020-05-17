@@ -73,7 +73,7 @@ export const Map = () => {
             latitude: 10.557,
             longitude: 107.54,
           }}
-          calloutOffset={{ x: 80, y: 130 }}
+          calloutOffset={{ x: 80, y: 190 }}
         >
           <UserPin />
           <Callout tooltip>
@@ -115,15 +115,15 @@ const styles = StyleSheet.create({
   },
   blurCallout: {
     width: 200,
-    height: 120,
+    height: 180,
     borderRadius: 20,
   },
   blurColour: {
     width: 200,
-    height: 120,
+    height: 180,
     borderRadius: 20,
     backgroundColor: Theme.colors.blue,
-    opacity: 0.4,
+    opacity: 0.5,
     // position: 'absolute'
   },
 });

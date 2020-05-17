@@ -9,6 +9,7 @@ import { NavigationContainer } from '@react-navigation/native';
 
 import BottomMenu from './BottomMenu';
 import useLinking from './navigation/useLinking';
+import SosState from './context/sos/SosState';
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
@@ -48,9 +49,11 @@ export default function App(props) {
       <View style={styles.container}>
         {Platform.OS === 'ios' && <StatusBar barStyle="light-content" />}
         <SafeAreaProvider>
-          <NavigationContainer>
-            <BottomMenu />
-          </NavigationContainer>
+          <SosState>
+            <NavigationContainer>
+              <BottomMenu />
+            </NavigationContainer>
+          </SosState>
         </SafeAreaProvider>
       </View>
     );

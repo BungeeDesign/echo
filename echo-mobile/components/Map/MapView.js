@@ -13,8 +13,8 @@ export const Map = () => {
   const [region, setRegion] = useState({
     latitude: 10.550231,
     longitude: 107.552053,
-    latitudeDelta: 0.01,
-    longitudeDelta: 0.01,
+    latitudeDelta: 0.03,
+    longitudeDelta: 0.03,
   });
 
   const [mapExpanded, setMapExpanded] = useState(400);

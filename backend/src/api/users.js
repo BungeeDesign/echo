@@ -42,7 +42,6 @@ router.post('/', async (req, res, next) => {
  * @access Private
  */
 router.post('/sos', async (req, res, next) => {
-  console.log('We hit boss....');
   try {
     const io = req.app.get('io');
 

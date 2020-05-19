@@ -12,6 +12,9 @@ require('dotenv').config();
 
 const middlewares = require('./middlewares');
 
+// Load auth
+require('./auth/auth');
+
 // Set Socket IO to the app object for use within API routes
 app.set('io', io);
 
@@ -25,6 +28,9 @@ app.use(morgan('common'));
 app.use(helmet());
 app.use(cors({ origin: process.env.CORS_ORIGIN }));
 app.use(express.json());
+
+// Passport middleware
+// app.use(passport.initialize());
 
 // Root endpoint
 app.get('/', (req, res) => {

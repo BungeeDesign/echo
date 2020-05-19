@@ -1,6 +1,6 @@
 const { Router } = require('express');
-const bcrypt = require('bcryptjs');
 const passport = require('passport');
+const jwt = require('jsonwebtoken');
 const {
   registerValidation,
   loginValidation,
@@ -58,21 +58,12 @@ router.post('/register', async (req, res, next) => {
           },
         });
 
-        // Hash Password (Argon 2 Refactor - When full JS version is out)
-        const salt = await bcrypt.genSalt(10);
-        const passwordHash = await bcrypt.hash(
-          newAdmin.loginDetails.password,
-          salt,
-        );
-
-        // Set Password as Hash Password
-        newAdmin.loginDetails.password = passwordHash;
-
         // Save new admin
         await newAdmin.save();
         res.json({ msg: 'success' });
       }
     } catch (err) {
+      console.log(err);
       if (err.name === 'Validation Error') {
         res.status(422);
       }
@@ -86,31 +77,51 @@ router.post('/register', async (req, res, next) => {
  * @desc Login route for admin
  * @access Public
  */
-router.post('/login', (req, res, next) => {
+router.post('/login', async (req, res, next) => {
   const { error } = loginValidation(req.body);
 
   if (error) {
     res.status(400).json({ msg: error.details[0].message });
   } else {
-    try {
-      passport.authenticate('local', (err, user, info) => {
-        if (!user) {
-          return res.status(400).send([user, 'Cannot log in', info]);
+    passport.authenticate('login', async (passportError, admin, info) => {
+      try {
+        if (passportError || !admin) {
+          return next(passportError);
         }
 
-        req.login(user, () => {
-          res.send('Logged in');
-        });
+        // eslint-disable-next-line no-shadow
+        req.login(admin, { session: false }, async (error) => {
+          if (error) return next(error);
 
-        return false;
-      })(req, res, next);
-    } catch (err) {
-      if (err.name === 'ValidationError') {
-        res.status(422);
+          // Create the JWT - Using email and ID
+          // eslint-disable-next-line no-underscore-dangle
+          const body = { _id: admin._id, email: admin.loginDetails.email };
+
+          // Sign the token and set the payload body (admin id and emeail)
+          const token = jwt.sign({ admin: body }, 'echo_humanitarian_secret');
+
+          // Send the token back
+          return res.json({ token });
+        });
+      } catch (err) {
+        return next(err);
       }
-      next(err);
-    }
+
+      return false;
+    })(req, res, next);
   }
 });
+
+router.get(
+  '/profile',
+  passport.authenticate('jwt', { session: false }),
+  (req, res, next) => {
+    res.json({
+      message: 'You made it to the secure route',
+      admin: req.user,
+      token: req.query.token,
+    });
+  },
+);
 
 module.exports = router;

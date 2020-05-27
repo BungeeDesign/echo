@@ -12,6 +12,20 @@ const StyledHeading = styled.h2`
       margin: 0px;
     `}
 
+  ${({ medium }) =>
+    medium &&
+    css`
+      font-size: 1.5rem;
+      margin: 0px;
+    `}
+
+  ${({ large }) =>
+    large &&
+    css`
+      font-size: 2.5rem;
+      margin: 0px;
+    `}
+
   ${({ subtle }) =>
     subtle &&
     css`
@@ -19,9 +33,9 @@ const StyledHeading = styled.h2`
     `}
 `;
 
-const Heading = ({ children, small, subtle }) => {
+const Heading = ({ children, small, medium, large, subtle }) => {
   return (
-    <StyledHeading small={small} subtle={subtle}>
+    <StyledHeading small={small} medium={medium} large={large} subtle={subtle}>
       {children}
     </StyledHeading>
   );

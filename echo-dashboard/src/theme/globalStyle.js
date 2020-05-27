@@ -1,9 +1,18 @@
 import { createGlobalStyle } from 'styled-components';
+import huricane from '../assets/images/home/huricane.jpg';
 
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
-    background-color: ${({ theme }) => theme.colors.blue}
+    background-color: ${({ theme }) =>
+      window.location.pathname === '/login'
+        ? theme.colors.purpleBlue
+        : theme.colors.blue};
+    background-image: url(
+      ${({ theme }) => (window.location.pathname === '/' ? huricane : 'none')}
+    );
+    /* background-attachment: ${({ theme }) =>
+      window.location.pathname === '/' ? 'fixed' : 'scroll'} */
   }
 
   /* MapBox GL Style Overrides */

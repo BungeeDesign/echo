@@ -36,7 +36,7 @@ adminsSchema.pre('save', async function (next) {
   const hash = await bcrypt.hash(admin.loginDetails.password, 10);
 
   // Replace the plain text password with the hashed one.
-  this.password = hash;
+  this.loginDetails.password = hash;
 
   // Move to the next middleware
   next();

@@ -63,7 +63,6 @@ router.post('/register', async (req, res, next) => {
         res.json({ msg: 'success' });
       }
     } catch (err) {
-      console.log(err);
       if (err.name === 'Validation Error') {
         res.status(422);
       }

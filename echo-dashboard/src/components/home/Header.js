@@ -77,6 +77,7 @@ const StyledHeader = styled.div`
     align-items: center;
     margin-bottom: 50px;
     margin-left: 50px;
+    height: fit-content;
     img {
       width: 600px;
       /* animation: ${hueRotate} ease 9s alternate-reverse infinite;  */
@@ -89,7 +90,7 @@ const Header = ({ children, small, subtle }) => {
     <StyledHeader small={small} subtle={subtle}>
       <div className="header-text">
         <Logo large />
-        <Heading>ECHO</Heading>
+        <Heading>Echo</Heading>
       </div>
       <div className="about-section">
         <div className="about-content">

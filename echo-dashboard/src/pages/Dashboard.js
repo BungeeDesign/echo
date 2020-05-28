@@ -18,6 +18,7 @@ import UserMessages from '../components/messages/UserMessages';
 import DashboardMap from '../components/map/DashboardMap';
 import GlobalStyle from '../theme/globalStyle';
 import { motion } from 'framer-motion';
+import Notification from '../components/layout/Notification';
 
 function Dashboard(props) {
   return (
@@ -29,6 +30,7 @@ function Dashboard(props) {
       <UserState>
         <GlobalStyle />
         <Wrapper>
+          <Notification>Welcome, James 👋 </Notification>
           <SideBar>
             <SideBarItem logo>
               <Logo />

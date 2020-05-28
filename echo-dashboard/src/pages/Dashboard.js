@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import UserState from '../context/user/UserState';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -19,8 +19,28 @@ import DashboardMap from '../components/map/DashboardMap';
 import GlobalStyle from '../theme/globalStyle';
 import { motion } from 'framer-motion';
 import Notification from '../components/layout/Notification';
+import API from '../utils/API';
 
 function Dashboard(props) {
+  const [admin, setAdmin] = useState([]);
+
+  useEffect(() => {
+    getAdminInfo();
+  }, []);
+
+  const getAdminInfo = async () => {
+    try {
+      const res = await API.get('/admins');
+
+      // Get data of logged in admin
+      const adminID = JSON.parse(localStorage.getItem('admin'));
+      const loggedInAdmin = res.data.find((admin) => admin._id === adminID);
+      setAdmin(loggedInAdmin);
+    } catch (error) {
+      console.log('[API Request Error] - /admins');
+    }
+  };
+
   return (
     <motion.div
       inital={{ opacity: 0 }}
@@ -30,7 +50,7 @@ function Dashboard(props) {
       <UserState>
         <GlobalStyle />
         <Wrapper>
-          <Notification>Welcome, James 👋 </Notification>
+          <Notification>Welcome, {admin.name} 👋 </Notification>
           <SideBar>
             <SideBarItem logo>
               <Logo />

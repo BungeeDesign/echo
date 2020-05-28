@@ -11,6 +11,7 @@ async function verify(token) {
   try {
     const res = await API.get(`/admins/profile?token=${token}`);
     if (res.status === 200) {
+      localStorage.setItem('admin', JSON.stringify(res.data.admin._id));
       return true;
     }
   } catch (error) {

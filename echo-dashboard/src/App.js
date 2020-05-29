@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Switch, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { AuthContext } from './context/auth/auth';
 import LoginPage from './pages/Login';
 import Home from './pages/Home';
@@ -8,7 +8,6 @@ import PrivateRoute from './PrivateRoute';
 import { AnimatePresence } from 'framer-motion';
 
 const App = () => {
-  const location = useLocation();
   const exsistingTokens = JSON.parse(localStorage.getItem('tokens'));
   const [authTokens, setAuthTokens] = useState(exsistingTokens);
 
@@ -26,11 +25,13 @@ const App = () => {
         }}
       >
         <AnimatePresence exitBeforeEnter initial={false}>
-          <Switch location={location} key={location.pathname}>
-            <Route exact path="/" component={Home} />
-            <Route exact path="/login" component={LoginPage} />
-            <PrivateRoute exact path="/dashboard" component={Dashboard} />
-          </Switch>
+          <Router>
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <Route exact path="/login" component={LoginPage} />
+              <PrivateRoute exact path="/dashboard" component={Dashboard} />
+            </Switch>
+          </Router>
         </AnimatePresence>
       </AuthContext.Provider>
     </div>

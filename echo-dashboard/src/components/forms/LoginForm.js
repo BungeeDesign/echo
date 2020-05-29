@@ -99,10 +99,24 @@ export default function LoginForm() {
         setError(res.data.message);
       } else if (res.status === 200) {
         setAuthTokens(res.data);
+        try {
+          const reponse = await API.get(
+            `/admins/profile?token=${res.data.token}`,
+          );
+          if (reponse.status === 200) {
+            localStorage.setItem(
+              'admin',
+              JSON.stringify(reponse.data.admin._id),
+            );
+          }
+        } catch (error) {
+          console.log('Admin Details Request Error', error);
+        }
         setLoggedIn(true);
       }
     } catch (error) {
-      setError(error.response.data.message);
+      // console.log(error);
+      setError(error.response.data?.message);
     }
   };
 

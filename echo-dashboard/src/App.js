@@ -19,7 +19,12 @@ const App = () => {
 
   return (
     <div className="App">
-      <AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens }}>
+      <AuthContext.Provider
+        value={{
+          authTokens,
+          setAuthTokens: setTokens,
+        }}
+      >
         <AnimatePresence exitBeforeEnter initial={false}>
           <Switch location={location} key={location.pathname}>
             <Route exact path="/" component={Home} />

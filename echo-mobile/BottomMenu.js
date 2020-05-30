@@ -2,6 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { TabBar } from './components/Layout/Menu/TabBar';
+import OnboardingScreen from './screens/OnboardingScreen';
 import HomeScreen from './screens/HomeScreen';
 import AlertsScreen from './screens/AlertsScreen';
 import StatsScreen from './screens/StatsScreen';

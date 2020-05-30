@@ -3,11 +3,11 @@ import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { SplashScreen } from 'expo';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
-
+import { createStackNavigator } from '@react-navigation/stack';
 import BottomMenu from './BottomMenu';
+import onBoarding from './screens/OnboardingScreen';
 import useLinking from './navigation/useLinking';
 import SosState from './context/sos/SosState';
 
@@ -15,6 +15,9 @@ export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
   const containerRef = React.useRef();
   const { getInitialState } = useLinking(containerRef);
+  const Stack = createStackNavigator();
+
+  const [isOnboarded, setOnboarded] = React.useState(false);
 
   // Load any resources or data that we need prior to rendering the app
   React.useEffect(() => {
@@ -51,8 +54,15 @@ export default function App(props) {
         <SafeAreaProvider>
           <SosState>
             <NavigationContainer>
-              <BottomMenu />
+              <Stack.Navigator headerMode="none">
+                <Stack.Screen name="onBoarding" component={onBoarding} />
+              </Stack.Navigator>
             </NavigationContainer>
+            {isOnboarded && (
+              <NavigationContainer>
+                <BottomMenu />
+              </NavigationContainer>
+            )}
           </SosState>
         </SafeAreaProvider>
       </View>

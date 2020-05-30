@@ -2,9 +2,9 @@ import React from 'react';
 import { View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
-export const Logo = () => {
+export const Logo = ({ large }) => {
   return (
-    <View stlye={{ width: 200, height: 300 }}>
+    <View stlye={{ width: 60, height: 300 }}>
       <Svg width={41} height={43}>
         <Path
           d="M9.09254 32.344V10.6559C9.09254 6.95972 10.3617 5.0886 12.757 4.50755C12.2095 4.39237 11.6309 4.3335 10.9776 4.3335C7.47187 4.3335 5.56812 6.14575 5.56812 10.6559V32.344C5.56812 36.8542 7.47187 38.6664 10.9776 38.6664C11.6309 38.6664 12.2095 38.6076 12.757 38.4924C10.3586 37.9113 9.09254 36.0428 9.09254 32.344Z"

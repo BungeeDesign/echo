@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Image,
   Animated,
+  TextInput,
 } from 'react-native';
 import Theme from '../constants/Theme';
 import LottieView from 'lottie-react-native';
@@ -20,10 +21,14 @@ export default function OnboardingScreen() {
         'Please answer the following questions as accurately as possible.',
       ],
       multipleQuestion: false,
+      textQuestion: false,
+      numerical: false,
     },
     {
       question: ['Do you have access to shelter?', 'Are you trapped?'],
       multipleQuestion: false,
+      textQuestion: false,
+      numerical: false,
     },
     {
       question: [
@@ -31,6 +36,8 @@ export default function OnboardingScreen() {
         'What level do you have?',
       ],
       multipleQuestion: true,
+      textQuestion: false,
+      numerical: false,
     },
     {
       question: [
@@ -38,11 +45,55 @@ export default function OnboardingScreen() {
         'What health complications or injuries do you have?',
       ],
       multipleQuestion: false,
+      textQuestion: true,
+      numerical: false,
+    },
+    {
+      question: ['Are you with any other adults?', 'How many?'],
+      multipleQuestion: false,
+      textQuestion: true,
+      numerical: true,
+    },
+    {
+      question: ['Are you with any minors?', 'How many?'],
+      multipleQuestion: false,
+      textQuestion: true,
+      numerical: true,
     },
   ]);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [subQuestionIndex, setSubQuestionIndex] = useState(0);
   const [isMultipleQuestion, setMultipleQuestion] = useState(false);
+  const [isTextQuestion, setTextQuestion] = useState(false);
+  const [userDetails, setUserDetails] = useState({
+    userDetails: {
+      name: '',
+      location: {
+        lat: 0,
+        long: 0,
+      },
+      age: 0,
+      gender: '',
+      pregnant: false,
+      adultsWith: 0,
+      minorsWith: 0,
+    },
+    stats: {
+      food: '',
+      health: {
+        complications: [],
+      },
+      shelter: false,
+      trapped: false,
+    },
+    sos: {
+      active: false,
+      message: 'n/a',
+    },
+  });
+  const [textQuestionValue, setTextQuestionValue] = useState('');
+  const [isNumerical, setNumerical] = useState(false);
+  const [isLastQuestion, setLastQuestion] = useState(false);
 
   const fadeIn = new Animated.Value(0);
   const fadeOut = useMemoOne(() => new Animated.Value(1), [fadeOut]);
@@ -95,23 +146,52 @@ export default function OnboardingScreen() {
   };
 
   const onButtonYes = () => {
-    if (questions[questionIndex].question.length > 1) {
-      // Increment Sub Question
-      setSubQuestionIndex((subQuestions) => subQuestions + 1);
-      if (questions[questionIndex].multipleQuestion) {
-        console.log('Multiple Increment', questions[questionIndex]);
-        setMultipleQuestion((multipleQuestion) => !multipleQuestion);
-      } else {
-        setMultipleQuestion(false);
-      }
+    // End of situation questions
+    console.log('Quesiton Index Last Question', questionIndex);
+    console.log('Quesiton Length', questions.length);
+    if (isLastQuestion) {
+      console.log('End of questions');
     } else {
-      setQuestionIndex((questions) => questions + 1);
-      console.log('Question Increment', questions[questionIndex]);
-      if (questions[questionIndex].multipleQuestion) {
-        console.log('Multiple Increment', questions[questionIndex]);
-        setMultipleQuestion((multipleQuestion) => !multipleQuestion);
+      if (questions[questionIndex].question.length > 1) {
+        // Increment Sub Question
+        setSubQuestionIndex((subQuestions) => subQuestions + 1);
+
+        // Multiple Answer Question
+        if (questions[questionIndex].multipleQuestion) {
+          setMultipleQuestion((multipleQuestion) => !multipleQuestion);
+        } else {
+          setMultipleQuestion(false);
+        }
+
+        // Text Answer Question
+        if (questions[questionIndex].textQuestion) {
+          setTextQuestion((textQuestion) => !textQuestion);
+
+          if (questions[questionIndex].numerical) {
+            setNumerical(true);
+          } else {
+            setNumerical(false);
+          }
+        } else {
+          setTextQuestion(false);
+        }
+
+        if (subQuestionIndex > 0) {
+          setSubQuestionIndex(0);
+          setQuestionIndex((questions) => questions + 1);
+        }
+
+        if (questionIndex === 5) {
+          setLastQuestion(true);
+        }
       } else {
-        setMultipleQuestion(false);
+        setQuestionIndex((questions) => questions + 1);
+        if (questions[questionIndex].multipleQuestion) {
+          console.log('Multiple Increment', questions[questionIndex]);
+          setMultipleQuestion((multipleQuestion) => !multipleQuestion);
+        } else {
+          setMultipleQuestion(false);
+        }
       }
     }
   };
@@ -147,6 +227,26 @@ export default function OnboardingScreen() {
           </View>
         </View>
       </Animated.View>
+      {isTextQuestion && (
+        <View style={styles.buttonsContainer}>
+          <View style={styles.touchable}>
+            <LinearGradient
+              colors={[Theme.colors.skyBlue, Theme.colors.oceanBlue]}
+              style={styles.button}
+            >
+              <TextInput
+                style={styles.textInput}
+                onChangeText={(text) => setTextQuestionValue(text)}
+                value={textQuestionValue}
+                autoFocus={true}
+                returnKeyType="done"
+                onSubmitEditing={onButtonYes}
+                keyboardType={isNumerical ? 'numeric' : 'default'}
+              />
+            </LinearGradient>
+          </View>
+        </View>
+      )}
       {isMultipleQuestion && (
         <View style={styles.buttonsMultipleContainer}>
           <TouchableOpacity
@@ -162,7 +262,7 @@ export default function OnboardingScreen() {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.touchableMultiple}
-            onPress={onButtonNo}
+            onPress={onButtonYes}
           >
             <LinearGradient
               colors={['#1D3D7E', '#183160']}
@@ -173,7 +273,7 @@ export default function OnboardingScreen() {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.touchableMultiple}
-            onPress={onButtonNo}
+            onPress={onButtonYes}
           >
             <LinearGradient
               colors={['#1D3D7E', '#183160']}
@@ -184,7 +284,7 @@ export default function OnboardingScreen() {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.touchableMultiple}
-            onPress={onButtonNo}
+            onPress={onButtonYes}
           >
             <LinearGradient
               colors={[Theme.colors.skyBlue, Theme.colors.oceanBlue]}
@@ -195,7 +295,7 @@ export default function OnboardingScreen() {
           </TouchableOpacity>
         </View>
       )}
-      {!isMultipleQuestion && (
+      {!isMultipleQuestion && !isTextQuestion && (
         <View style={styles.buttonsContainer}>
           <TouchableOpacity style={styles.touchable} onPress={onButtonYes}>
             <LinearGradient
@@ -286,5 +386,16 @@ const styles = StyleSheet.create({
     fontFamily: Theme.fonts.body,
     fontSize: 20,
     textAlign: 'center',
+  },
+  textInput: {
+    fontSize: 25,
+    color: 'white',
+    fontFamily: Theme.fonts.body,
+    height: 50,
+    width: 200,
+    backgroundColor: Theme.colors.blue,
+    borderRadius: 10,
+    marginBottom: 335,
+    padding: 4,
   },
 });

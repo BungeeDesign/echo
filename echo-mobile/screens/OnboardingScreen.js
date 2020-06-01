@@ -7,6 +7,8 @@ import {
   Image,
   Animated,
   TextInput,
+  ScrollView,
+  Picker,
 } from 'react-native';
 import Theme from '../constants/Theme';
 import LottieView from 'lottie-react-native';
@@ -65,35 +67,50 @@ export default function OnboardingScreen() {
   const [subQuestionIndex, setSubQuestionIndex] = useState(0);
   const [isMultipleQuestion, setMultipleQuestion] = useState(false);
   const [isTextQuestion, setTextQuestion] = useState(false);
-  const [userDetails, setUserDetails] = useState({
-    userDetails: {
-      name: '',
-      location: {
-        lat: 0,
-        long: 0,
+  const [userDetails, setUserDetails] = useState([
+    {
+      userDetails: {
+        name: '',
+        location: {
+          lat: 0,
+          long: 0,
+        },
+        age: 0,
+        gender: '',
+        pregnant: false,
+        adultsWith: 0,
+        minorsWith: 0,
       },
-      age: 0,
-      gender: '',
-      pregnant: false,
-      adultsWith: 0,
-      minorsWith: 0,
-    },
-    stats: {
-      food: '',
-      health: {
-        complications: [],
+      stats: {
+        food: '',
+        health: {
+          complications: [],
+        },
+        shelter: false,
+        trapped: false,
       },
-      shelter: false,
-      trapped: false,
+      sos: {
+        active: false,
+        message: 'n/a',
+      },
     },
-    sos: {
-      active: false,
-      message: 'n/a',
-    },
-  });
+  ]);
   const [textQuestionValue, setTextQuestionValue] = useState('');
+  const [multipleQuestionValue, setMultipleQuestionValue] = useState('');
   const [isNumerical, setNumerical] = useState(false);
   const [isLastQuestion, setLastQuestion] = useState(false);
+  const [personalDetails, setPersonalDetails] = useState(false);
+  const [adultsWith, setAdultsWith] = useState(0);
+  const [minorsWith, setMinorsWith] = useState(0);
+  const [injury, setInjury] = useState('');
+  const [isFemale, setFemale] = useState(false);
+  const [isPregnant, setPregnant] = useState(false);
+  const [isMale, setMale] = useState(false);
+  const [userName, setUserName] = useState('');
+  const [userAge, setUserAge] = useState(0);
+  const [isComplete, setComplete] = useState(false);
+
+  const [yumyum, setYumyum] = useState('');
 
   const fadeIn = new Animated.Value(0);
   const fadeOut = useMemoOne(() => new Animated.Value(1), [fadeOut]);
@@ -147,10 +164,9 @@ export default function OnboardingScreen() {
 
   const onButtonYes = () => {
     // End of situation questions
-    console.log('Quesiton Index Last Question', questionIndex);
-    console.log('Quesiton Length', questions.length);
     if (isLastQuestion) {
       console.log('End of questions');
+      setPersonalDetails(true);
     } else {
       if (questions[questionIndex].question.length > 1) {
         // Increment Sub Question
@@ -184,6 +200,53 @@ export default function OnboardingScreen() {
         if (questionIndex === 5) {
           setLastQuestion(true);
         }
+
+        // Set Question Data
+        switch (questionIndex) {
+          case 1:
+            setUserDetails([
+              ...userDetails,
+              (userDetails[0].stats.shelter = true),
+            ]);
+            break;
+
+          default:
+            break;
+        }
+
+        // Set Sub Question Data
+        switch (questions[questionIndex].question[subQuestionIndex]) {
+          case 'Are you trapped?':
+            setUserDetails([
+              ...userDetails,
+              (userDetails[0].stats.trapped = true),
+            ]);
+            break;
+          case 'What health complications or injuries do you have?':
+            setUserDetails([
+              ...userDetails,
+              (userDetails[0].stats.health.complications = textQuestionValue.split(
+                ' ',
+              )),
+            ]);
+            break;
+          case 'How many?':
+            if (questionIndex === 4) {
+              setUserDetails([
+                ...userDetails,
+                (userDetails[0].userDetails.adultsWith = textQuestionValue),
+              ]);
+            } else {
+              setUserDetails([
+                ...userDetails,
+                (userDetails[0].stats.trapped = textQuestionValue),
+              ]);
+            }
+            break;
+          default:
+            break;
+        }
+        console.log('User Details Object: ', userDetails);
       } else {
         setQuestionIndex((questions) => questions + 1);
         if (questions[questionIndex].multipleQuestion) {
@@ -196,38 +259,212 @@ export default function OnboardingScreen() {
     }
   };
 
-  const questionOut = () => {
-    Animated.timing(fadeOut, {
-      toValue: 0,
-      duration: 2000,
-      useNativeDriver: true,
-    }).start();
+  const onMultipleQuestion = (level) => {
+    console.log('On Multiple Question....');
+    setMultipleQuestionValue(level);
+    onButtonYes();
   };
 
-  const questionIn = () => {
-    Animated.timing(fadeIn, {
-      toValue: 1,
-      duration: 2000,
-      useNativeDriver: true,
-    }).start();
+  const onPersonalDetails = () => {
+    // Set Users Personal Details
+    setUserDetails([
+      ...userDetails,
+      (userDetails[0].userDetails.name = userName),
+    ]);
+
+    setUserDetails([
+      ...userDetails,
+      (userDetails[0].userDetails.age = userAge),
+    ]);
+
+    setUserDetails([
+      ...userDetails,
+      (userDetails[0].userDetails.gender = isMale ? 'Male' : 'Female'),
+    ]);
+
+    setUserDetails([
+      ...userDetails,
+      (userDetails[0].userDetails.pregnant = isPregnant),
+    ]);
+
+    setUserDetails([
+      ...userDetails,
+      (userDetails[0].stats.food = multipleQuestionValue),
+    ]);
+
+    console.log('[********Final Object*********]: ', userDetails);
   };
+
+  const settingUpAccount = () => {};
 
   return (
     <View style={styles.container}>
       <Animated.View style={[styles.header, { opacity: fadeIn }]}>
         <View style={styles.brandingContainer}>
           <Image source={Logo} style={styles.logo} resizeMode="contain" />
-          <Text style={styles.brandingText}>Welcome to Echo</Text>
+          <Text style={styles.brandingText}>
+            {personalDetails ? 'Now enter your details' : 'Welcome to Echo'}
+          </Text>
         </View>
-        <View style={styles.questionsContainer}>
-          <View style={styles.questionItem}>
-            <Animated.Text style={[styles.questionText, { opacity: fadeOut }]}>
-              {questions[questionIndex].question[subQuestionIndex]}
-            </Animated.Text>
+        {!personalDetails && (
+          <View style={styles.questionsContainer}>
+            <View style={styles.questionItem}>
+              <Animated.Text
+                style={[styles.questionText, { opacity: fadeOut }]}
+              >
+                {questions[questionIndex].question[subQuestionIndex]}
+              </Animated.Text>
+            </View>
           </View>
-        </View>
+        )}
       </Animated.View>
-      {isTextQuestion && (
+      {personalDetails && (
+        <View style={{ flex: 2, alignItems: 'center' }}>
+          <LinearGradient
+            colors={[Theme.colors.skyBlue, Theme.colors.oceanBlue]}
+            style={{
+              flex: 1,
+              width: '100%',
+              alignItems: 'center',
+              padding: 10,
+            }}
+          >
+            <ScrollView
+              style={{ width: '100%', height: 900, marginTop: 50 }}
+              contentContainerStyle={{
+                height: 600,
+                alignItems: 'center',
+              }}
+            >
+              <TextInput
+                style={styles.personalDetailsTextInput}
+                onChangeText={(text) => setUserName(text)}
+                value={userName}
+                autoFocus={true}
+                returnKeyType="default"
+                onSubmitEditing={onPersonalDetails}
+                placeholder="Name"
+                placeholderTextColor="white"
+              />
+              <TextInput
+                style={styles.personalDetailsTextInput}
+                onChangeText={(text) => setUserAge(text)}
+                value={userAge}
+                autoFocus={true}
+                returnKeyType="default"
+                onSubmitEditing={onPersonalDetails}
+                placeholder="Age"
+                placeholderTextColor="white"
+              />
+              <View style={{ flexDirection: 'row', height: 80 }}>
+                <TouchableOpacity
+                  disabled={isMale ? true : false}
+                  onPress={() => {
+                    setMale(true), setComplete(true);
+                  }}
+                  style={{ opacity: isMale ? 0.5 : 1 }}
+                >
+                  <View
+                    style={{
+                      alignItems: 'center',
+                      marginTop: 10,
+                      backgroundColor: Theme.colors.blue,
+                      height: 'auto',
+                      borderRadius: 5,
+                      width: 100,
+                      padding: 10,
+                      margin: 5,
+                    }}
+                  >
+                    <Text style={styles.questionText}>Male</Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  disabled={isMale ? true : false}
+                  onPress={() => {
+                    setFemale(true), setComplete(true);
+                  }}
+                  style={{ opacity: isFemale ? 0.5 : 1 }}
+                >
+                  <View
+                    style={{
+                      alignItems: 'center',
+                      marginTop: 10,
+                      backgroundColor: Theme.colors.blue,
+                      height: 'auto',
+                      borderRadius: 5,
+                      width: 100,
+                      padding: 10,
+                      margin: 5,
+                    }}
+                  >
+                    <Text style={styles.questionText}>Female</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+              {isFemale && (
+                <>
+                  <Text style={styles.questionText}>Are you pregnant?</Text>
+                  <View style={{ flexDirection: 'row', height: 100 }}>
+                    <TouchableOpacity onPress={setPregnant(true)}>
+                      <View
+                        style={{
+                          alignItems: 'center',
+                          marginTop: 10,
+                          backgroundColor: Theme.colors.blue,
+                          height: 'auto',
+                          borderRadius: 5,
+                          width: 70,
+                          padding: 10,
+                          margin: 5,
+                        }}
+                      >
+                        <Text style={styles.questionText}>Yes</Text>
+                      </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={setPregnant(false)}>
+                      <View
+                        style={{
+                          alignItems: 'center',
+                          marginTop: 10,
+                          backgroundColor: Theme.colors.blue,
+                          height: 'auto',
+                          borderRadius: 5,
+                          width: 70,
+                          padding: 10,
+                          margin: 5,
+                        }}
+                      >
+                        <Text style={styles.questionText}>No</Text>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                </>
+              )}
+
+              {isComplete && (
+                <TouchableOpacity onPress={settingUpAccount}>
+                  <View
+                    style={{
+                      alignItems: 'center',
+                      marginTop: 20,
+                      backgroundColor: Theme.colors.blue,
+                      height: 'auto',
+                      borderRadius: 10,
+                      width: 250,
+                      padding: 10,
+                      margin: 5,
+                    }}
+                  >
+                    <Text style={styles.questionText}>Continue</Text>
+                  </View>
+                </TouchableOpacity>
+              )}
+            </ScrollView>
+          </LinearGradient>
+        </View>
+      )}
+      {isTextQuestion && !personalDetails && (
         <View style={styles.buttonsContainer}>
           <View style={styles.touchable}>
             <LinearGradient
@@ -247,11 +484,13 @@ export default function OnboardingScreen() {
           </View>
         </View>
       )}
-      {isMultipleQuestion && (
+      {isMultipleQuestion && !personalDetails && (
         <View style={styles.buttonsMultipleContainer}>
           <TouchableOpacity
             style={styles.touchableMultiple}
-            onPress={onButtonYes}
+            onPress={() => {
+              onMultipleQuestion('Low');
+            }}
           >
             <LinearGradient
               colors={[Theme.colors.skyBlue, Theme.colors.oceanBlue]}
@@ -262,7 +501,9 @@ export default function OnboardingScreen() {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.touchableMultiple}
-            onPress={onButtonYes}
+            onPress={() => {
+              onMultipleQuestion('Medium');
+            }}
           >
             <LinearGradient
               colors={['#1D3D7E', '#183160']}
@@ -273,7 +514,9 @@ export default function OnboardingScreen() {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.touchableMultiple}
-            onPress={onButtonYes}
+            onPress={() => {
+              onMultipleQuestion('High');
+            }}
           >
             <LinearGradient
               colors={['#1D3D7E', '#183160']}
@@ -284,7 +527,9 @@ export default function OnboardingScreen() {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.touchableMultiple}
-            onPress={onButtonYes}
+            onPress={() => {
+              onMultipleQuestion('Plenty');
+            }}
           >
             <LinearGradient
               colors={[Theme.colors.skyBlue, Theme.colors.oceanBlue]}
@@ -295,7 +540,7 @@ export default function OnboardingScreen() {
           </TouchableOpacity>
         </View>
       )}
-      {!isMultipleQuestion && !isTextQuestion && (
+      {!isMultipleQuestion && !isTextQuestion && !personalDetails && (
         <View style={styles.buttonsContainer}>
           <TouchableOpacity style={styles.touchable} onPress={onButtonYes}>
             <LinearGradient
@@ -397,5 +642,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 335,
     padding: 4,
+  },
+  personalDetailsTextInput: {
+    fontSize: 20,
+    color: 'white',
+    fontFamily: Theme.fonts.body,
+    // height: 50,
+    width: 250,
+    backgroundColor: Theme.colors.blue,
+    borderRadius: 10,
+    marginBottom: 30,
+    padding: 10,
   },
 });

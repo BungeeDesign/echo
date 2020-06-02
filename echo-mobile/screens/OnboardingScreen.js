@@ -8,15 +8,16 @@ import {
   Animated,
   TextInput,
   ScrollView,
-  Picker,
+  Alert,
 } from 'react-native';
 import Theme from '../constants/Theme';
 import LottieView from 'lottie-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Logo from '../assets/images/logo-icon.png';
 import { useMemoOne } from 'use-memo-one';
+import * as Location from 'expo-location';
 
-export default function OnboardingScreen() {
+export default function OnboardingScreen({ navigation }) {
   const [questions, setQuestions] = useState([
     {
       question: [
@@ -61,6 +62,12 @@ export default function OnboardingScreen() {
       multipleQuestion: false,
       textQuestion: true,
       numerical: true,
+    },
+    {
+      question: [''],
+      multipleQuestion: false,
+      textQuestion: false,
+      numerical: false,
     },
   ]);
   const [questionIndex, setQuestionIndex] = useState(0);
@@ -109,13 +116,15 @@ export default function OnboardingScreen() {
   const [userName, setUserName] = useState('');
   const [userAge, setUserAge] = useState(0);
   const [isComplete, setComplete] = useState(false);
-
-  const [yumyum, setYumyum] = useState('');
+  const [location, setLocation] = useState(null);
 
   const fadeIn = new Animated.Value(0);
   const fadeOut = useMemoOne(() => new Animated.Value(1), [fadeOut]);
 
   useEffect(() => {
+    // Get user Location
+    getUserLocation();
+
     Animated.timing(fadeIn, {
       toValue: 1,
       duration: 2000,
@@ -139,6 +148,20 @@ export default function OnboardingScreen() {
       setQuestionIndex(1);
     }, 3800);
   }, []);
+
+  const getUserLocation = async () => {
+    let { status } = await Location.requestPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert(
+        'Location Error',
+        'Echo requires your location in order to work.',
+      );
+    }
+
+    let location = await Location.getCurrentPositionAsync({});
+    setLocation(location);
+    console.log('Location: ', location);
+  };
 
   const onButtonNo = () => {
     if (subQuestionIndex > 0) {
@@ -197,7 +220,11 @@ export default function OnboardingScreen() {
           setQuestionIndex((questions) => questions + 1);
         }
 
-        if (questionIndex === 5) {
+        if (questionIndex === 6) {
+          setUserDetails([
+            ...userDetails,
+            (userDetails[0].userDetails.minorsWith = textQuestionValue),
+          ]);
           setLastQuestion(true);
         }
 
@@ -229,6 +256,8 @@ export default function OnboardingScreen() {
                 ' ',
               )),
             ]);
+
+            setTextQuestionValue('');
             break;
           case 'How many?':
             if (questionIndex === 4) {
@@ -236,17 +265,22 @@ export default function OnboardingScreen() {
                 ...userDetails,
                 (userDetails[0].userDetails.adultsWith = textQuestionValue),
               ]);
-            } else {
+
+              // Reset Text
+              setTextQuestionValue('');
+            } else if (questionIndex === 5) {
               setUserDetails([
                 ...userDetails,
-                (userDetails[0].stats.trapped = textQuestionValue),
+                (userDetails[0].userDetails.minorsWith = textQuestionValue),
               ]);
+
+              // End Questions
+              setPersonalDetails(true);
             }
             break;
           default:
             break;
         }
-        console.log('User Details Object: ', userDetails);
       } else {
         setQuestionIndex((questions) => questions + 1);
         if (questions[questionIndex].multipleQuestion) {
@@ -279,6 +313,16 @@ export default function OnboardingScreen() {
 
     setUserDetails([
       ...userDetails,
+      (userDetails[0].stats.food = multipleQuestionValue),
+    ]);
+
+    console.log('[********Final Object*********]: ', userDetails);
+  };
+
+  const settingUpAccount = () => {
+    console.log('Male: ', isMale);
+    setUserDetails([
+      ...userDetails,
       (userDetails[0].userDetails.gender = isMale ? 'Male' : 'Female'),
     ]);
 
@@ -287,15 +331,11 @@ export default function OnboardingScreen() {
       (userDetails[0].userDetails.pregnant = isPregnant),
     ]);
 
-    setUserDetails([
-      ...userDetails,
-      (userDetails[0].stats.food = multipleQuestionValue),
-    ]);
-
-    console.log('[********Final Object*********]: ', userDetails);
+    navigation.navigate('OnboardProcessing', {
+      user: userDetails,
+      location: location,
+    });
   };
-
-  const settingUpAccount = () => {};
 
   return (
     <View style={styles.container}>
@@ -350,7 +390,7 @@ export default function OnboardingScreen() {
                 style={styles.personalDetailsTextInput}
                 onChangeText={(text) => setUserAge(text)}
                 value={userAge}
-                autoFocus={true}
+                autoFocus={false}
                 returnKeyType="default"
                 onSubmitEditing={onPersonalDetails}
                 placeholder="Age"
@@ -358,9 +398,11 @@ export default function OnboardingScreen() {
               />
               <View style={{ flexDirection: 'row', height: 80 }}>
                 <TouchableOpacity
-                  disabled={isMale ? true : false}
+                  disabled={isFemale ? true : false}
                   onPress={() => {
-                    setMale(true), setComplete(true);
+                    setMale(true);
+                    onPersonalDetails();
+                    setComplete(true);
                   }}
                   style={{ opacity: isMale ? 0.5 : 1 }}
                 >
@@ -382,7 +424,9 @@ export default function OnboardingScreen() {
                 <TouchableOpacity
                   disabled={isMale ? true : false}
                   onPress={() => {
-                    setFemale(true), setComplete(true);
+                    setFemale(true);
+                    onPersonalDetails();
+                    setComplete(true);
                   }}
                   style={{ opacity: isFemale ? 0.5 : 1 }}
                 >
@@ -647,7 +691,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: 'white',
     fontFamily: Theme.fonts.body,
-    // height: 50,
     width: 250,
     backgroundColor: Theme.colors.blue,
     borderRadius: 10,

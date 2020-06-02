@@ -10,6 +10,7 @@ import BottomMenu from './BottomMenu';
 import onBoarding from './screens/OnboardingScreen';
 import useLinking from './navigation/useLinking';
 import SosState from './context/sos/SosState';
+import OnboardProcessing from './screens/OnboardProcessing';
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
@@ -56,6 +57,10 @@ export default function App(props) {
             <NavigationContainer>
               <Stack.Navigator headerMode="none">
                 <Stack.Screen name="onBoarding" component={onBoarding} />
+                <Stack.Screen
+                  name="OnboardProcessing"
+                  component={OnboardProcessing}
+                />
               </Stack.Navigator>
             </NavigationContainer>
             {isOnboarded && (

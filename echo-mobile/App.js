@@ -1,5 +1,11 @@
 import * as React from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import {
+  Platform,
+  StatusBar,
+  StyleSheet,
+  View,
+  AsyncStorage,
+} from 'react-native';
 import { SplashScreen } from 'expo';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
@@ -8,14 +14,12 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import BottomMenu from './BottomMenu';
 import onBoarding from './screens/OnboardingScreen';
-import useLinking from './navigation/useLinking';
 import SosState from './context/sos/SosState';
 import OnboardProcessing from './screens/OnboardProcessing';
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
   const containerRef = React.useRef();
-  const { getInitialState } = useLinking(containerRef);
   const Stack = createStackNavigator();
 
   const [isOnboarded, setOnboarded] = React.useState(false);
@@ -44,7 +48,25 @@ export default function App(props) {
     }
 
     loadResourcesAndDataAsync();
+    userOnboarding();
   }, []);
+
+  const userOnboarding = async () => {
+    let isOnboarded;
+    try {
+      isOnboarded = await AsyncStorage.getItem('onboarding');
+    } catch (error) {
+      console.log('[Storage Error] - Unable to get data');
+    }
+
+    if (isOnboarded === null) {
+      try {
+        await AsyncStorage.setItem('onboarding', 'false');
+      } catch (error) {
+        console.log('[Storage Error] - Unable to save data');
+      }
+    }
+  };
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
     return null;
@@ -54,7 +76,7 @@ export default function App(props) {
         {Platform.OS === 'ios' && <StatusBar barStyle="light-content" />}
         <SafeAreaProvider>
           <SosState>
-            <NavigationContainer>
+            {/* <NavigationContainer>
               <Stack.Navigator headerMode="none">
                 <Stack.Screen name="onBoarding" component={onBoarding} />
                 <Stack.Screen
@@ -62,12 +84,10 @@ export default function App(props) {
                   component={OnboardProcessing}
                 />
               </Stack.Navigator>
+            </NavigationContainer> */}
+            <NavigationContainer>
+              <BottomMenu />
             </NavigationContainer>
-            {isOnboarded && (
-              <NavigationContainer>
-                <BottomMenu />
-              </NavigationContainer>
-            )}
           </SosState>
         </SafeAreaProvider>
       </View>

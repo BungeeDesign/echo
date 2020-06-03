@@ -1,8 +1,10 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import React, { useRef, useEffect, useState, useContext } from 'react';
+import { StyleSheet, View, Text, Image, AsyncStorage } from 'react-native';
 import Theme from '../constants/Theme';
 import API from '../utils/API';
 import useHubFinder from '../utils/hooks/useHubFinder';
+import echoHub from '../assets/images/echoHub.png';
+import SosContext from '../context/sos/sosContext';
 import { Logo } from '../components/Layout/Logo';
 import { Map } from '../components/Map/MapView';
 import { SubHeading } from '../components/Layout/SubHeading';
@@ -10,6 +12,9 @@ import { PreviewBubble } from '../components/Layout/Messages/PreviewBubble';
 import LottieView from 'lottie-react-native';
 
 export default function OnboardProcessing({ route, navigation }) {
+  const sosContext = useContext(SosContext);
+  const { setOnboarded } = sosContext;
+
   const [closestHub, setClosestHub] = useState({});
   // const [user, setUser] = useState([]);
 
@@ -51,8 +56,23 @@ export default function OnboardProcessing({ route, navigation }) {
     // Mock real-world delay
     setTimeout(() => {
       const hubsFound = useHubFinder(user);
-      setClosestHub({ hub: hubsFound.hubClosestTo, distance: hubsFound.miles });
+      setClosestHub({
+        hub: hubsFound.hubClosestTo,
+        distance: hubsFound.miles.toFixed(2),
+      });
     }, 1200);
+
+    // Set onboarding to true
+    try {
+      await AsyncStorage.setItem('onboarding', 'true');
+    } catch (error) {
+      console.log('[Storage Error] - Unable to save data');
+    }
+
+    setTimeout(() => {
+      setOnboarded(true);
+      navigation.navigate('home');
+    }, 2000);
   };
 
   return (
@@ -65,15 +85,19 @@ export default function OnboardProcessing({ route, navigation }) {
           alignItems: 'center',
         }}
       >
-        <LottieView
-          ref={loader}
-          source={require('../assets/animations/echo-logo-loader.json')}
-          speed={1}
-          style={{ width: 200 }}
-        />
+        {Object.keys(closestHub).length ? (
+          <Image source={echoHub} style={{ width: 100 }} resizeMode="contain" />
+        ) : (
+          <LottieView
+            ref={loader}
+            source={require('../assets/animations/echo-logo-loader.json')}
+            speed={1}
+            style={{ width: 200 }}
+          />
+        )}
         <Text style={styles.loadingText}>
           {Object.keys(closestHub).length
-            ? `Your closest hub is Echo ${closestHub.hub}, it's currently ${closestHub.distance} Miles Away.`
+            ? `Your closest hub is Echo ${closestHub.hub}, it's currently ${closestHub.distance} Miles Away 📍`
             : 'Please wait, while we find your local Echo hub'}
         </Text>
       </View>

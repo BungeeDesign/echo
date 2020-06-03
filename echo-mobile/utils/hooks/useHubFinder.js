@@ -102,7 +102,7 @@ const getDistance = (lat1, long1, lat2, long2, unit = 'M') => {
 };
 
 export default (users) => {
-  console.log('useHubFinder Hook: ', users);
+  // console.log('useHubFinder Hook: ', users);
   // Get User Distance
   const userDistances = processDistances(users);
 

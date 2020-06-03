@@ -55,7 +55,9 @@ export default function App(props) {
       console.log('[Storage Error] - Unable to get data');
     }
 
+    console.log('App.js Onboarding Storage Value: ', isOnboarded);
     if (isOnboarded === null) {
+      console.log('Onboarding is false.....');
       try {
         await AsyncStorage.setItem('onboarding', 'false');
       } catch (error) {

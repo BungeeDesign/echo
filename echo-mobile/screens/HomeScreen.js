@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import React, { useEffect } from 'react';
+import { StyleSheet, View, Text, AsyncStorage } from 'react-native';
 import Theme from '../constants/Theme';
 import { Logo } from '../components/Layout/Logo';
 import { Map } from '../components/Map/MapView';
@@ -7,6 +7,13 @@ import { SubHeading } from '../components/Layout/SubHeading';
 import { PreviewBubble } from '../components/Layout/Messages/PreviewBubble';
 
 export default function HomeScreen() {
+  useEffect(() => {
+    (async () => {
+      // console.log('Clear Async Storage');
+      // AsyncStorage.clear();
+    })();
+  }, []);
+
   return (
     <View style={styles.container}>
       <Map />

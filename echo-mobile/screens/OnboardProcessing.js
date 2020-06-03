@@ -34,9 +34,10 @@ export default function OnboardProcessing({ route, navigation }) {
   }, []);
 
   const processOnboarding = async () => {
+    console.log('User Object => ', user[0]);
     try {
       const res = await API.get('/hubs');
-      console.log('API Request: ', res.data);
+      // console.log('API Request: ', res.data);
       // Format Hub Objecct for use with the hub finder (Repurposed from the useInsight hook from the dashboard)
       for (const hub of res.data) {
         user.push({
@@ -51,6 +52,18 @@ export default function OnboardProcessing({ route, navigation }) {
       }
     } catch (error) {
       console.log('[API Request Error] - Could not get /hubs');
+    }
+
+    // Create the new user on the backend
+    try {
+      const res = await API.post('/users', user[0]);
+      console.log('Created User: ', res.data);
+    } catch (error) {
+      console.log(
+        '[API Request Error] - Could not create new user /users',
+        error,
+      );
+      console.log(error.response);
     }
 
     // Mock real-world delay
@@ -79,7 +92,7 @@ export default function OnboardProcessing({ route, navigation }) {
     setTimeout(() => {
       setOnboarded(true);
       navigation.navigate('home');
-    }, 2000);
+    }, 2300);
   };
 
   return (

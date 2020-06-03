@@ -1,8 +1,7 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { View, AsyncStorage } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { TabBar } from './components/Layout/Menu/TabBar';
-import OnboardingScreen from './screens/OnboardingScreen';
 import HomeScreen from './screens/HomeScreen';
 import AlertsScreen from './screens/AlertsScreen';
 import StatsScreen from './screens/StatsScreen';
@@ -16,17 +15,18 @@ import SosContext from './context/sos/sosContext';
 export default () => {
   const sosContext = useContext(SosContext);
   const { userOnboarded, setOnboarded } = sosContext;
+  const [isRegistered, setRegistered] = useState(false);
 
   useEffect(() => {
     isOnboarded();
-    (async () => {
-      try {
-        let data = await AsyncStorage.getItem('onboarding');
-        setOnboarded(data);
-      } catch (error) {
-        console.log('[Storage Error] - Unable to get data');
-      }
-    })();
+    // (async () => {
+    //   try {
+    //     let data = await AsyncStorage.getItem('onboarding');
+    //     setOnboarded(data);
+    //   } catch (error) {
+    //     console.log('[Storage Error] - Unable to get data');
+    //   }
+    // })();
   }, []);
 
   const isOnboarded = async () => {
@@ -38,7 +38,9 @@ export default () => {
     }
 
     if (isOnboarded === 'true') {
+      console.log('Is Onboarded True?????');
       setOnboarded(true);
+      setRegistered(true);
     }
   };
 
@@ -59,7 +61,7 @@ export default () => {
       )}
       <View style={{ flex: 1, position: 'relative' }}>
         <Tab.Navigator
-          initialRouteName={isOnboarded ? 'home' : 'onboarding'}
+          initialRouteName={isRegistered ? 'home' : 'onboarding'}
           tabBar={(props) => (
             <TabBar
               {...props}

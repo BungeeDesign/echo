@@ -15,9 +15,10 @@ import SosContext from './context/sos/sosContext';
 
 export default () => {
   const sosContext = useContext(SosContext);
-  const { userOnboarded } = sosContext;
+  const { userOnboarded, setOnboarded } = sosContext;
 
   useEffect(() => {
+    isOnboarded();
     (async () => {
       try {
         let data = await AsyncStorage.getItem('onboarding');
@@ -27,6 +28,19 @@ export default () => {
       }
     })();
   }, []);
+
+  const isOnboarded = async () => {
+    let isOnboarded;
+    try {
+      isOnboarded = await AsyncStorage.getItem('onboarding');
+    } catch (error) {
+      console.log('[Storage Error] - Unable to get data');
+    }
+
+    if (isOnboarded === 'true') {
+      setOnboarded(true);
+    }
+  };
 
   const Tab = createBottomTabNavigator();
   return (
@@ -45,7 +59,7 @@ export default () => {
       )}
       <View style={{ flex: 1, position: 'relative' }}>
         <Tab.Navigator
-          initialRouteName="onboarding"
+          initialRouteName={isOnboarded ? 'home' : 'onboarding'}
           tabBar={(props) => (
             <TabBar
               {...props}

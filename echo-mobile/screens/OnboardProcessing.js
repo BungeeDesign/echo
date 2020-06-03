@@ -62,6 +62,13 @@ export default function OnboardProcessing({ route, navigation }) {
       });
     }, 1200);
 
+    // Set userDetails object to local storage
+    try {
+      await AsyncStorage.setItem('userDetails', JSON.stringify(user));
+    } catch (error) {
+      console.log('[Storage Error] - Unable to save data');
+    }
+
     // Set onboarding to true
     try {
       await AsyncStorage.setItem('onboarding', 'true');

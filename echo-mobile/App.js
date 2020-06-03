@@ -13,16 +13,12 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import BottomMenu from './BottomMenu';
-import onBoarding from './screens/OnboardingScreen';
 import SosState from './context/sos/SosState';
-import OnboardProcessing from './screens/OnboardProcessing';
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
   const containerRef = React.useRef();
   const Stack = createStackNavigator();
-
-  const [isOnboarded, setOnboarded] = React.useState(false);
 
   // Load any resources or data that we need prior to rendering the app
   React.useEffect(() => {

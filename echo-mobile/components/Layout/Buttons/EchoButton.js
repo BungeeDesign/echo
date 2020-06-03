@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, AsyncStorage } from 'react-native';
 import Animated, { call, cond, eq, useCode } from 'react-native-reanimated';
 import { mix } from 'react-native-redash';
 import CircularProgress from '../../../utils/CircularProgress';
@@ -18,7 +18,12 @@ const CONTENT_SIZE = SIZE - STROKE_WIDTH * 2;
 
 export const EchoButton = ({ progress }) => {
   const [active, setActive] = useState(false);
+  const [userID, setUserID] = useState('');
   const pulseAnimation = useRef(null);
+
+  useEffect(() => {
+    getUser();
+  }, []);
 
   useCode(
     () =>
@@ -29,10 +34,18 @@ export const EchoButton = ({ progress }) => {
     [progress],
   );
 
+  const getUser = async () => {
+    try {
+      const user = await AsyncStorage.getItem('userDetails');
+      setUserID(JSON.parse(user)._id);
+    } catch (error) {
+      console.log('[Storage Error] - Unable to get data');
+    }
+  };
+
   const triggerSOS = async () => {
     try {
-      console.log('API REq');
-      const res = await API.post('users/sos');
+      const res = await API.post('users/sos', { id: userID });
     } catch (error) {
       console.log('[Echo Button] - Request Error');
     }

@@ -57,7 +57,13 @@ export default function OnboardProcessing({ route, navigation }) {
     // Create the new user on the backend
     try {
       const res = await API.post('/users', user[0]);
-      console.log('Created User: ', res.data);
+
+      // Set userDetails object to local storage
+      try {
+        await AsyncStorage.setItem('userDetails', JSON.stringify(res.data));
+      } catch (error) {
+        console.log('[Storage Error] - Unable to save data');
+      }
     } catch (error) {
       console.log(
         '[API Request Error] - Could not create new user /users',
@@ -74,13 +80,6 @@ export default function OnboardProcessing({ route, navigation }) {
         distance: hubsFound.miles.toFixed(2),
       });
     }, 1200);
-
-    // Set userDetails object to local storage
-    try {
-      await AsyncStorage.setItem('userDetails', JSON.stringify(user));
-    } catch (error) {
-      console.log('[Storage Error] - Unable to save data');
-    }
 
     // Set onboarding to true
     try {

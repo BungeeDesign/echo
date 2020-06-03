@@ -286,7 +286,15 @@ export default function OnboardingScreen({ navigation }) {
     onButtonYes();
   };
 
-  const onPersonalDetails = () => {
+  const onPersonalDetails = (gender) => {
+    if (gender === 'Male') {
+      setMale(true);
+      setComplete(true);
+    } else {
+      setFemale(true);
+      setComplete(true);
+    }
+
     let updatedUserDetails = [
       {
         userDetails: {
@@ -420,9 +428,7 @@ export default function OnboardingScreen({ navigation }) {
                 <TouchableOpacity
                   disabled={isFemale ? true : false}
                   onPress={() => {
-                    setMale(true);
-                    onPersonalDetails();
-                    setComplete(true);
+                    onPersonalDetails('Male');
                   }}
                   style={{ opacity: isMale ? 0.5 : 1 }}
                 >

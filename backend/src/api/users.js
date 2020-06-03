@@ -45,7 +45,7 @@ router.post('/sos', async (req, res, next) => {
   try {
     const io = req.app.get('io');
 
-    io.emit('sosAlert', true);
+    io.emit('sosAlert', req.body);
 
     res.json({ done: 'yessss' });
   } catch (error) {

@@ -74,42 +74,17 @@ export default function OnboardingScreen({ navigation }) {
   const [subQuestionIndex, setSubQuestionIndex] = useState(0);
   const [isMultipleQuestion, setMultipleQuestion] = useState(false);
   const [isTextQuestion, setTextQuestion] = useState(false);
-  const [userDetails, setUserDetails] = useState([
-    {
-      userDetails: {
-        name: '',
-        location: {
-          lat: 0,
-          long: 0,
-        },
-        age: 0,
-        gender: '',
-        pregnant: false,
-        adultsWith: 0,
-        minorsWith: 0,
-      },
-      stats: {
-        food: '',
-        health: {
-          complications: [],
-        },
-        shelter: false,
-        trapped: false,
-      },
-      sos: {
-        active: false,
-        message: 'n/a',
-      },
-    },
-  ]);
-  const [textQuestionValue, setTextQuestionValue] = useState('');
+  const [userDetails, setUserDetails] = useState([]);
   const [multipleQuestionValue, setMultipleQuestionValue] = useState('');
+  const [textQuestionValue, setTextQuestionValue] = useState('');
   const [isNumerical, setNumerical] = useState(false);
   const [isLastQuestion, setLastQuestion] = useState(false);
   const [personalDetails, setPersonalDetails] = useState(false);
   const [adultsWith, setAdultsWith] = useState(0);
   const [minorsWith, setMinorsWith] = useState(0);
   const [injury, setInjury] = useState('');
+  const [shelter, setShelter] = useState(false);
+  const [trapped, setTrapped] = useState(false);
   const [isFemale, setFemale] = useState(false);
   const [isPregnant, setPregnant] = useState(false);
   const [isMale, setMale] = useState(false);
@@ -221,20 +196,14 @@ export default function OnboardingScreen({ navigation }) {
         }
 
         if (questionIndex === 6) {
-          setUserDetails([
-            ...userDetails,
-            (userDetails[0].userDetails.minorsWith = textQuestionValue),
-          ]);
+          setMinorsWith(textQuestionValue);
           setLastQuestion(true);
         }
 
         // Set Question Data
         switch (questionIndex) {
           case 1:
-            setUserDetails([
-              ...userDetails,
-              (userDetails[0].stats.shelter = true),
-            ]);
+            setShelter(true);
             break;
 
           default:
@@ -244,35 +213,53 @@ export default function OnboardingScreen({ navigation }) {
         // Set Sub Question Data
         switch (questions[questionIndex].question[subQuestionIndex]) {
           case 'Are you trapped?':
-            setUserDetails([
-              ...userDetails,
-              (userDetails[0].stats.trapped = true),
-            ]);
+            setTrapped(true);
             break;
           case 'What health complications or injuries do you have?':
-            setUserDetails([
-              ...userDetails,
-              (userDetails[0].stats.health.complications = textQuestionValue.split(
-                ' ',
-              )),
-            ]);
+            setInjury(textQuestionValue);
 
+            // Reset Text
             setTextQuestionValue('');
             break;
           case 'How many?':
             if (questionIndex === 4) {
-              setUserDetails([
-                ...userDetails,
-                (userDetails[0].userDetails.adultsWith = textQuestionValue),
-              ]);
+              setAdultsWith(textQuestionValue);
 
               // Reset Text
               setTextQuestionValue('');
             } else if (questionIndex === 5) {
-              setUserDetails([
-                ...userDetails,
-                (userDetails[0].userDetails.minorsWith = textQuestionValue),
-              ]);
+              setMinorsWith(textQuestionValue);
+
+              let updatedUserDetails = [
+                {
+                  userDetails: {
+                    name: userName,
+                    location: {
+                      lat: 0,
+                      long: 0,
+                    },
+                    age: userAge,
+                    gender: isMale ? 'Male' : 'Female',
+                    pregnant: isPregnant,
+                    adultsWith: adultsWith,
+                    minorsWith: minorsWith,
+                  },
+                  stats: {
+                    food: multipleQuestionValue,
+                    health: {
+                      complications: injury.split(' '),
+                    },
+                    shelter: shelter,
+                    trapped: trapped,
+                  },
+                  sos: {
+                    active: false,
+                    message: 'n/a',
+                  },
+                },
+              ];
+
+              setUserDetails(updatedUserDetails);
 
               // End Questions
               setPersonalDetails(true);
@@ -299,37 +286,8 @@ export default function OnboardingScreen({ navigation }) {
     onButtonYes();
   };
 
-  const onPersonalDetails = () => {
-    // Set Users Personal Details
-    setUserDetails([
-      ...userDetails,
-      (userDetails[0].userDetails.name = userName),
-    ]);
-
-    setUserDetails([
-      ...userDetails,
-      (userDetails[0].userDetails.age = userAge),
-    ]);
-
-    setUserDetails([
-      ...userDetails,
-      (userDetails[0].stats.food = multipleQuestionValue),
-    ]);
-
-    console.log('[********Final Object*********]: ', userDetails);
-  };
-
   const settingUpAccount = () => {
-    console.log('Male: ', isMale);
-    setUserDetails([
-      ...userDetails,
-      (userDetails[0].userDetails.gender = isMale ? 'Male' : 'Female'),
-    ]);
-
-    setUserDetails([
-      ...userDetails,
-      (userDetails[0].userDetails.pregnant = isPregnant),
-    ]);
+    console.log('Final User Details Object: ', userDetails);
 
     navigation.navigate('OnboardProcessing', {
       user: userDetails,
@@ -382,7 +340,6 @@ export default function OnboardingScreen({ navigation }) {
                 value={userName}
                 autoFocus={true}
                 returnKeyType="default"
-                onSubmitEditing={onPersonalDetails}
                 placeholder="Name"
                 placeholderTextColor="white"
               />
@@ -392,7 +349,6 @@ export default function OnboardingScreen({ navigation }) {
                 value={userAge}
                 autoFocus={false}
                 returnKeyType="default"
-                onSubmitEditing={onPersonalDetails}
                 placeholder="Age"
                 placeholderTextColor="white"
               />
@@ -401,7 +357,6 @@ export default function OnboardingScreen({ navigation }) {
                   disabled={isFemale ? true : false}
                   onPress={() => {
                     setMale(true);
-                    onPersonalDetails();
                     setComplete(true);
                   }}
                   style={{ opacity: isMale ? 0.5 : 1 }}

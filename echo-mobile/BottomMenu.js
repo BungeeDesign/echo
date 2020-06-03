@@ -18,7 +18,6 @@ export default () => {
   const { userOnboarded } = sosContext;
 
   useEffect(() => {
-    console.log('[----------| Bottom Menu Re-Render');
     (async () => {
       try {
         let data = await AsyncStorage.getItem('onboarding');

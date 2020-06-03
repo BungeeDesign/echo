@@ -24,9 +24,9 @@ export const EchoButton = ({ progress }) => {
     () =>
       cond(
         eq(progress, 1),
-        call([], () => setActive(true))
+        call([], () => setActive(true)),
       ),
-    [progress]
+    [progress],
   );
 
   const triggerSOS = async () => {
@@ -41,7 +41,7 @@ export const EchoButton = ({ progress }) => {
     const soundObject = new Audio.Sound();
     try {
       await soundObject.loadAsync(
-        require('../../../assets/audio/sos-alarm.mp3')
+        require('../../../assets/audio/sos-alarm.mp3'),
       );
       await soundObject.setIsLoopingAsync(true);
       await soundObject.playAsync();
@@ -92,13 +92,15 @@ export const EchoButton = ({ progress }) => {
           />
         </View>
       </View>
-      <View style={styles.pulseAnimation}>
-        <LottieView
-          ref={pulseAnimation}
-          source={require('../../../assets/animations/sos-pulse.json')}
-          speed={2}
-        />
-      </View>
+      {active && (
+        <View style={styles.pulseAnimation}>
+          <LottieView
+            ref={pulseAnimation}
+            source={require('../../../assets/animations/sos-pulse.json')}
+            speed={2}
+          />
+        </View>
+      )}
     </View>
   );
 };

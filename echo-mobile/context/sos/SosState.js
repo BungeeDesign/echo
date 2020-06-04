@@ -13,24 +13,10 @@ const SosState = (props) => {
 
   const [state, dispatch] = useReducer(SosReducer, initialState);
 
-  const setSosAlert = async () => {
-    console.log('Running....');
-    const socket = socketIOClient('http://127.0.0.1:1255', {
-      jsonp: false,
-      agent: '-',
-      pfx: '-',
-      cert: '-',
-      ca: '-',
-      ciphers: '-',
-      rejectUnauthorized: '-',
-      perMessageDeflate: '-',
-    });
-    socket.on('sosAlert', (data) => {
-      console.log('BEEP BEEEP SOS Alert!!!!!!! Active');
-      // dispatch({
-      //   type: SET_SOS_ALERT,
-      //   payload: data,
-      // });
+  const setSosAlert = async (sos) => {
+    dispatch({
+      type: SET_SOS_ALERT,
+      payload: sos,
     });
   };
 

@@ -5,7 +5,7 @@ export default (state, action) => {
     case SET_SOS_ALERT:
       return {
         ...state,
-        scrollPosition: action.payload,
+        sosAlert: action.payload,
       };
     case SET_ONBOARDED:
       return {

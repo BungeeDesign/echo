@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 import { View, StyleSheet, AsyncStorage } from 'react-native';
 import Animated, { call, cond, eq, useCode } from 'react-native-reanimated';
 import { mix } from 'react-native-redash';
@@ -9,23 +9,33 @@ import Svg, { Path } from 'react-native-svg';
 import * as Haptics from 'expo-haptics';
 import API from '../../../utils/API';
 import LottieView from 'lottie-react-native';
+import SosContext from '../../../context/sos/sosContext';
 import { Audio } from 'expo-av';
 
 const SIZE = 80;
 const STROKE_WIDTH = 10;
 const ICON_SIZE = 96;
 const CONTENT_SIZE = SIZE - STROKE_WIDTH * 2;
+let hasFired = false;
 
 export const EchoButton = ({ progress }) => {
+  const sosContext = useContext(SosContext);
+  const { setSosAlert, sosAlert } = sosContext;
   const [active, setActive] = useState(false);
   const [userID, setUserID] = useState('');
-  // const pulseAnimation = useRef(null);
-
-  // console.log('Echo Button Progress......', progress);
+  // const [hasFired, setHasfired] = useState(false);
+  const pulseAnimation = useRef(null);
 
   useEffect(() => {
-    console.log('Am i being called???');
-    // getUser();
+    getUser();
+    // run();
+    console.log('Ami i stopping...outeside');
+
+    if (!sosAlert) {
+      console.log('Ami i stopping...');
+      // Stop the SOS Animation
+      setActive(false);
+    }
   }, []);
 
   useCode(
@@ -53,27 +63,49 @@ export const EchoButton = ({ progress }) => {
       console.log('[Echo Button] - Request Error');
     }
 
+    playAudio();
+  };
+
+  const playAudio = async () => {
     // Play the SOS Audio
     const soundObject = new Audio.Sound();
-    try {
-      await soundObject.loadAsync(
-        require('../../../assets/audio/sos-alarm.mp3'),
-      );
-      await soundObject.setIsLoopingAsync(true);
-      await soundObject.playAsync();
-    } catch (error) {
-      console.log('[Audio Error] - SOS audio could not be played.');
+
+    if (active) {
+      try {
+        await soundObject.loadAsync(
+          require('../../../assets/audio/sos-alarm.mp3'),
+        );
+        await soundObject.setIsLoopingAsync(true);
+        await soundObject.playAsync();
+      } catch (error) {
+        console.log('[Audio Error] - SOS audio could not be played.');
+      }
+    } else {
+      try {
+        await soundObject.stopAsync();
+      } catch (error) {
+        console.log('[Audio Error] - SOS audio could not be stopped.');
+      }
     }
   };
 
   if (active) {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+    if (!hasFired) {
+      setSosAlert(true);
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
-    // Trigger Alert via API Call
-    // triggerSOS();
+      // Trigger Alert via API Call
+      triggerSOS();
 
-    // Play the SOS Animation
-    // pulseAnimation.current.play();
+      // Play the SOS Animation
+      pulseAnimation.current.play();
+
+      hasFired = true;
+    }
+
+    if (!sosAlert) {
+      setActive(false);
+    }
   }
 
   return (
@@ -108,7 +140,7 @@ export const EchoButton = ({ progress }) => {
           />
         </View>
       </View>
-      {/* <View
+      <View
         style={[styles.pulseAnimation, { display: active ? 'flex' : 'none' }]}
       >
         <LottieView
@@ -116,7 +148,7 @@ export const EchoButton = ({ progress }) => {
           source={require('../../../assets/animations/sos-pulse.json')}
           speed={2}
         />
-      </View> */}
+      </View>
     </View>
   );
 };

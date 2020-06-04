@@ -13,10 +13,12 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import BottomMenu from './BottomMenu';
+import BottomMenuOnboarding from './BottomMenuOnboarding';
 import SosState from './context/sos/SosState';
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
+  const [userOnboarded, setUserOnboarded] = React.useState(false);
   const containerRef = React.useRef();
   const Stack = createStackNavigator();
 
@@ -63,6 +65,9 @@ export default function App(props) {
       } catch (error) {
         console.log('[Storage Error] - Unable to save data');
       }
+    } else {
+      setUserOnboarded(true);
+      console.log('App.js Onboarding State: ', userOnboarded);
     }
   };
 
@@ -84,7 +89,7 @@ export default function App(props) {
               </Stack.Navigator>
             </NavigationContainer> */}
             <NavigationContainer>
-              <BottomMenu />
+              {userOnboarded ? <BottomMenu /> : <BottomMenuOnboarding />}
             </NavigationContainer>
           </SosState>
         </SafeAreaProvider>

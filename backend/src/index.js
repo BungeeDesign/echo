@@ -42,6 +42,7 @@ app.get('/', (req, res) => {
 app.use('/users', require('./api/users'));
 app.use('/admins', require('./api/admins'));
 app.use('/hubs', require('./api/hubs'));
+app.use('/messages', require('./api/messages'));
 
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);

@@ -19,10 +19,13 @@ const CONTENT_SIZE = SIZE - STROKE_WIDTH * 2;
 export const EchoButton = ({ progress }) => {
   const [active, setActive] = useState(false);
   const [userID, setUserID] = useState('');
-  const pulseAnimation = useRef(null);
+  // const pulseAnimation = useRef(null);
+
+  // console.log('Echo Button Progress......', progress);
 
   useEffect(() => {
-    getUser();
+    console.log('Am i being called???');
+    // getUser();
   }, []);
 
   useCode(
@@ -45,7 +48,7 @@ export const EchoButton = ({ progress }) => {
 
   const triggerSOS = async () => {
     try {
-      const res = await API.post('users/sos', { id: userID });
+      const res = await API.post('users/sos', { id: userID, state: active });
     } catch (error) {
       console.log('[Echo Button] - Request Error');
     }
@@ -67,10 +70,10 @@ export const EchoButton = ({ progress }) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
     // Trigger Alert via API Call
-    triggerSOS();
+    // triggerSOS();
 
     // Play the SOS Animation
-    pulseAnimation.current.play();
+    // pulseAnimation.current.play();
   }
 
   return (
@@ -105,15 +108,15 @@ export const EchoButton = ({ progress }) => {
           />
         </View>
       </View>
-      {active && (
-        <View style={styles.pulseAnimation}>
-          <LottieView
-            ref={pulseAnimation}
-            source={require('../../../assets/animations/sos-pulse.json')}
-            speed={2}
-          />
-        </View>
-      )}
+      {/* <View
+        style={[styles.pulseAnimation, { display: active ? 'flex' : 'none' }]}
+      >
+        <LottieView
+          ref={pulseAnimation}
+          source={require('../../../assets/animations/sos-pulse.json')}
+          speed={2}
+        />
+      </View> */}
     </View>
   );
 };

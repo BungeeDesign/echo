@@ -43,10 +43,21 @@ router.post('/', async (req, res, next) => {
  */
 router.post('/sos', async (req, res, next) => {
   try {
+    // Update the users SOS value
+    let user = await User.findById(req.body.id);
+
+    if (!user) {
+      return res.status(404).json({ msg: 'User not found' });
+    }
+
+    user = await User.findByIdAndUpdate(
+      req.body.id,
+      { $set: { 'sos.active': req.body.state } },
+      { new: true },
+    );
+
     const io = req.app.get('io');
-
     io.emit('sosAlert', req.body);
-
     res.json({ done: 'yessss' });
   } catch (error) {
     if (error.name === 'Validation Error') {

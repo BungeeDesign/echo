@@ -6,6 +6,7 @@ import Pin from './Pin';
 import UserPin from './UserPin';
 import MapModal from './MapModal';
 import InsightIcon from '../insights/InsightIcon';
+import socketIOClient from 'socket.io-client';
 
 const StyledContainer = styled.div`
   width: 100%;
@@ -40,6 +41,11 @@ const DashboardMap = () => {
    * use effect to request the updated data.
    */
   useEffect(() => {
+    const socket = socketIOClient('http://127.0.0.1:1255');
+
+    socket.on('sosAlert', (data) => {
+      getUsers();
+    });
     getUsers();
     console.log('Get Users Render...');
   }, []);

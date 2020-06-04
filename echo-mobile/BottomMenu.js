@@ -13,55 +13,22 @@ import OnboardingStack from './navigation/OnboardingStack';
 import SosContext from './context/sos/sosContext';
 
 export default () => {
-  const sosContext = useContext(SosContext);
-  const { userOnboarded, setOnboarded } = sosContext;
-  const [isRegistered, setRegistered] = useState(false);
-
-  useEffect(() => {
-    isOnboarded();
-    // (async () => {
-    //   try {
-    //     let data = await AsyncStorage.getItem('onboarding');
-    //     setOnboarded(data);
-    //   } catch (error) {
-    //     console.log('[Storage Error] - Unable to get data');
-    //   }
-    // })();
-  }, []);
-
-  const isOnboarded = async () => {
-    let isOnboarded;
-    try {
-      isOnboarded = await AsyncStorage.getItem('onboarding');
-    } catch (error) {
-      console.log('[Storage Error] - Unable to get data');
-    }
-
-    if (isOnboarded === 'true') {
-      console.log('Is Onboarded True?????');
-      setOnboarded(true);
-      setRegistered(true);
-    }
-  };
-
   const Tab = createBottomTabNavigator();
+
   return (
     <>
-      {userOnboarded && (
-        <View
-          style={{
-            position: 'absolute',
-            zIndex: 300,
-            bottom: 5,
-            alignSelf: 'center',
-          }}
-        >
-          <EchoButtonGesture />
-        </View>
-      )}
+      <View
+        style={{
+          position: 'absolute',
+          zIndex: 300,
+          bottom: 5,
+          alignSelf: 'center',
+        }}
+      >
+        <EchoButtonGesture />
+      </View>
       <View style={{ flex: 1, position: 'relative' }}>
         <Tab.Navigator
-          initialRouteName={isRegistered ? 'home' : 'onboarding'}
           tabBar={(props) => (
             <TabBar
               {...props}
@@ -74,9 +41,8 @@ export default () => {
           <Tab.Screen name="font" component={ProfileScreen} />
           <Tab.Screen name="chart-bar" component={StatsScreen} />
           <Tab.Screen name="user-alt" component={ProfileScreen} />
-          <Tab.Screen name="onboarding" component={OnboardingStack} />
         </Tab.Navigator>
-        {useSafeArea().bottom > 0 && userOnboarded && (
+        {useSafeArea().bottom > 0 && (
           <View
             style={{
               height: useSafeArea().bottom,

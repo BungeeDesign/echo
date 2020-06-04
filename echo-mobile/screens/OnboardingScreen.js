@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
   StyleSheet,
   View,
@@ -16,8 +16,11 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Logo from '../assets/images/logo-icon.png';
 import { useMemoOne } from 'use-memo-one';
 import * as Location from 'expo-location';
+import SosContext from '../context/sos/sosContext';
 
 export default function OnboardingScreen({ navigation }) {
+  const sosContext = useContext(SosContext);
+  const { userOnboarded, setOnboarded } = sosContext;
   const [questions, setQuestions] = useState([
     {
       question: [
@@ -97,6 +100,7 @@ export default function OnboardingScreen({ navigation }) {
   const fadeOut = useMemoOne(() => new Animated.Value(1), [fadeOut]);
 
   useEffect(() => {
+    // isOnboarded();
     // Get user Location
     getUserLocation();
 
@@ -123,6 +127,21 @@ export default function OnboardingScreen({ navigation }) {
       setQuestionIndex(1);
     }, 3800);
   }, []);
+
+  // const isOnboarded = async () => {
+  //   let isOnboarded;
+  //   try {
+  //     isOnboarded = await AsyncStorage.getItem('onboarding');
+  //   } catch (error) {
+  //     console.log('[Storage Error] - Unable to get data');
+  //   }
+
+  //   if (isOnboarded === 'true') {
+  //     console.log('OBOARDING SCREEN Is Onboarded True?????');
+  //     setOnboarded(true);
+  //     navigation.navigate('home');
+  //   }
+  // };
 
   const getUserLocation = async () => {
     let { status } = await Location.requestPermissionsAsync();

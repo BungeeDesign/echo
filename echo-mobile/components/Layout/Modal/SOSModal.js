@@ -5,12 +5,14 @@ import {
   Text,
   TouchableOpacity,
   Animated,
+  AsyncStorage,
   StyleSheet,
 } from 'react-native';
 import Theme from '../../../constants/Theme';
 import SosContext from '../../../context/sos/sosContext';
 import { BlurView } from 'expo-blur';
 import { useMemoOne } from 'use-memo-one';
+import API from '../../../utils/API';
 
 const formatNumber = (number) => `0${number}`.slice(-2);
 
@@ -64,7 +66,23 @@ export default function SOSModal({}) {
     }).start();
   };
 
-  const onStop = () => {
+  const onStop = async () => {
+    let user;
+    try {
+      user = await AsyncStorage.getItem('userDetails');
+    } catch (error) {
+      console.log('[Storage Error] - Unable to get data');
+    }
+
+    try {
+      const res = await API.post('users/sos', {
+        id: JSON.parse(user)._id,
+        state: false,
+      });
+    } catch (error) {
+      console.log('[Echo Button] - Request Error (Could not stop)');
+    }
+
     setSosAlert(false);
     closeModal();
     reset();

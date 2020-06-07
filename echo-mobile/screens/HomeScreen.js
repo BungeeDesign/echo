@@ -1,15 +1,16 @@
 import React, { useEffect, useContext, useState } from 'react';
-import { StyleSheet, View, Text, AsyncStorage } from 'react-native';
+import { StyleSheet, View, Image, AsyncStorage } from 'react-native';
 import Theme from '../constants/Theme';
-import { Logo } from '../components/Layout/Logo';
 import { Map } from '../components/Map/MapView';
 import { SubHeading } from '../components/Layout/SubHeading';
 import { PreviewBubble } from '../components/Layout/Messages/PreviewBubble';
 import SOSModal from '../components/Layout/Modal/SOSModal';
 import sosContext from '../context/sos/sosContext';
+import screenLoader from '../assets/animations/ui-screen-loader.gif';
 import API from '../utils/API';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }) {
   const SosContext = useContext(sosContext);
   const { messages, getMessages } = SosContext;
 
@@ -17,12 +18,15 @@ export default function HomeScreen() {
   const [userID, setUserID] = useState('');
 
   useEffect(() => {
-    getMessages();
-    getUser();
-
     (async () => {
+      // Used for testing the onbaording screen / process
       // console.log('Clear Async Storage');
       // AsyncStorage.clear();
+
+      setInterval(() => {
+        getMessages();
+        getUser();
+      }, 2500);
     })();
   }, []);
 
@@ -34,8 +38,6 @@ export default function HomeScreen() {
       console.log('[Storage Error] - Unable to get data');
     }
 
-    console.log('User Messages: ', messages[0].messages);
-
     for (const message of messages) {
       if (
         message.messageRoom[0] === userID ||
@@ -46,6 +48,10 @@ export default function HomeScreen() {
     }
   };
 
+  const onMessagePress = () => {
+    navigation.navigate('bell');
+  };
+
   return (
     <View style={styles.container}>
       <SOSModal />
@@ -53,23 +59,41 @@ export default function HomeScreen() {
       <View style={styles.recentMessagesContainer}>
         <SubHeading text="Recent Messages" />
         <View style={styles.messages}>
-          {hasMessages ? (
+          {messages.length > 0 && (
             <>
-              <PreviewBubble
-                type={messages[0].messages[0].type}
-                message={messages[0].messages[0].message}
-              />
-              <PreviewBubble
-                type={messages[0].messages[2].type}
-                message={messages[0].messages[2].message}
-              />
+              <TouchableOpacity onPress={onMessagePress}>
+                <PreviewBubble
+                  type={messages[0].messages[0].type}
+                  message={messages[0].messages[0].message}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={onMessagePress}>
+                <PreviewBubble
+                  type={messages[0].messages[2].type}
+                  message={messages[0].messages[2].message}
+                />
+              </TouchableOpacity>
             </>
-          ) : (
-            <Text style={styles.bodyText}>
-              You don't have any messages yet ✉️
-            </Text>
           )}
         </View>
+        {messages.length === null ||
+          (messages.length === 0 && (
+            <View
+              style={{
+                flex: 0,
+                width: '100%',
+              }}
+            >
+              <Image
+                style={{
+                  width: 200,
+                  resizeMode: 'contain',
+                  transform: [{ scale: 0.5 }],
+                }}
+                source={screenLoader}
+              />
+            </View>
+          ))}
       </View>
     </View>
   );

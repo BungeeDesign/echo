@@ -29,11 +29,7 @@ export default function MessageView({ navigation }) {
   const [userMessage, setUserMessage] = useState('');
 
   useEffect(() => {
-    // Used to keep the data real-time
-    // setInterval(() => {
-    //   getMessages();
-    //   getUser();
-    // }, 3000);
+    // Polling the /messages endpoint to keep the state real-time
     setInterval(() => {
       (async () => {
         const res = await API.get('/messages');
@@ -42,8 +38,8 @@ export default function MessageView({ navigation }) {
       })();
     }, 2500);
 
+    // Ensure that the getUser funciton is called upon the screen coming into to focus
     navigation.addListener('focus', () => {
-      // getMessages();
       getUser();
     });
 

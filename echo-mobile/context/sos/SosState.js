@@ -1,14 +1,15 @@
 import React, { useReducer, useCallback } from 'react';
 import socketIOClient from 'socket.io-client';
-// import API from '../../utils/API';
-import SosContext from '../sos/sosContext';
+import API from '../../utils/API';
+import SosContext from './sosContext';
 import SosReducer from '../sos/sosReducer';
-import { SET_SOS_ALERT, SET_ONBOARDED } from '../types';
+import { SET_SOS_ALERT, SET_ONBOARDED, GET_MESSAGES } from '../types';
 
 const SosState = (props) => {
   const initialState = {
     sosAlert: false,
     userOnboarded: false,
+    messages: [],
   };
 
   const [state, dispatch] = useReducer(SosReducer, initialState);
@@ -28,13 +29,25 @@ const SosState = (props) => {
     });
   };
 
+  // Get User Messages
+  const getMessages = async () => {
+    const res = await API.get('/messages');
+
+    dispatch({
+      type: GET_MESSAGES,
+      payload: res.data,
+    });
+  };
+
   return (
     <SosContext.Provider
       value={{
         sosAlert: state.sosAlert,
         userOnboarded: state.userOnboarded,
+        messages: state.messages,
         setSosAlert,
         setOnboarded,
+        getMessages,
       }}
     >
       {props.children}

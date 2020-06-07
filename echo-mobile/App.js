@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Platform,
   StatusBar,
@@ -17,13 +17,11 @@ import BottomMenuOnboarding from './BottomMenuOnboarding';
 import SosState from './context/sos/SosState';
 
 export default function App(props) {
-  const [isLoadingComplete, setLoadingComplete] = React.useState(false);
-  const [userOnboarded, setUserOnboarded] = React.useState(false);
-  const containerRef = React.useRef();
-  const Stack = createStackNavigator();
+  const [isLoadingComplete, setLoadingComplete] = useState(false);
+  const [userOnboarded, setUserOnboarded] = useState(false);
 
   // Load any resources or data that we need prior to rendering the app
-  React.useEffect(() => {
+  useEffect(() => {
     async function loadResourcesAndDataAsync() {
       try {
         SplashScreen.preventAutoHide();
@@ -71,23 +69,12 @@ export default function App(props) {
     }
   };
 
-  if (!isLoadingComplete && !props.skipLoadingScreen) {
-    return null;
-  } else {
+  if (isLoadingComplete) {
     return (
       <View style={styles.container}>
         {Platform.OS === 'ios' && <StatusBar barStyle="light-content" />}
         <SafeAreaProvider>
           <SosState>
-            {/* <NavigationContainer>
-              <Stack.Navigator headerMode="none">
-                <Stack.Screen name="onBoarding" component={onBoarding} />
-                <Stack.Screen
-                  name="OnboardProcessing"
-                  component={OnboardProcessing}
-                />
-              </Stack.Navigator>
-            </NavigationContainer> */}
             <NavigationContainer>
               {userOnboarded ? <BottomMenu /> : <BottomMenuOnboarding />}
             </NavigationContainer>
@@ -95,6 +82,8 @@ export default function App(props) {
         </SafeAreaProvider>
       </View>
     );
+  } else {
+    return null;
   }
 }
 

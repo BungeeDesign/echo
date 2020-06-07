@@ -1,8 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import { width } from '../../../constants/Layout';
 import TabBarIcon from '../../../components/TabBarIcon';
-import EchoButtonGesture from '../Buttons/EchoButtonGesture';
 import Theme from '../../../constants/Theme';
 
 export const TabBar = ({ state, descriptors, navigation }) => {

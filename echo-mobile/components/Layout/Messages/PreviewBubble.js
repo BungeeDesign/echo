@@ -4,7 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Theme from '../../../constants/Theme';
 import { hide } from 'expo/build/launch/SplashScreen';
 
-export const PreviewBubble = ({}) => {
+export const PreviewBubble = ({ type, message }) => {
   return (
     <View style={styles.container}>
       <LinearGradient
@@ -17,20 +17,17 @@ export const PreviewBubble = ({}) => {
         <View style={styles.contentWrapper}>
           <View style={styles.messageTitle}>
             <View style={styles.fromLabel}>
-              <Text style={styles.labelText}>Lidia</Text>
+              <Text style={styles.labelText}>Admin</Text>
             </View>
             <View style={styles.hubLabel}>
-              <Text style={styles.labelText}>24M from Echo Peach</Text>
+              <Text style={styles.labelText}>Echo Peach Admin</Text>
             </View>
             <View style={styles.timeLabel}>
               <Text style={styles.labelText}>7:56</Text>
             </View>
           </View>
           <View style={styles.messageBody}>
-            <Text style={styles.bodyText}>
-              Hi i’m fairly close to you. I have some fresh fruit avaliable if
-              you need it. Let me know, if you would...
-            </Text>
+            <Text style={styles.bodyText}>{message}</Text>
           </View>
         </View>
       </LinearGradient>
@@ -41,14 +38,15 @@ export const PreviewBubble = ({}) => {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    height: 100,
+    height: 70,
     borderRadius: 15,
     overflow: 'hidden',
+    marginBottom: 10,
   },
   contentWrapper: {
-    // width: 300,
+    width: 330,
     // position: 'relative',
-    width: '100%',
+    // width: '100%',
     margin: 10,
   },
   gradient: {

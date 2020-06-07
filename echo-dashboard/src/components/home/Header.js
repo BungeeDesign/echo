@@ -3,7 +3,6 @@ import styled, { css, keyframes } from 'styled-components';
 import Heading from '../layout/Heading';
 import Logo from '../layout/Logo';
 import SignUp from '../forms/SignUp';
-import Globe from '../home/Globe';
 import connectedMap from '../../assets/images/home/connected-map.svg';
 
 const hueRotate = keyframes`

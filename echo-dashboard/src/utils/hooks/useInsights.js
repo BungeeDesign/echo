@@ -6,14 +6,14 @@ const generateInsights = (users, closestUsers) => {
     if (user.stats.food === 'Low') {
       let res = closestUsers.filter((obj) =>
         Object.keys(obj.user).some((key) =>
-          obj.user[key].includes(user.userDetails.name)
-        )
+          obj.user[key].includes(user.userDetails.name),
+        ),
       );
 
       let closestUserStats = users.filter((obj) =>
         Object.keys(obj.userDetails).some(
-          (key) => obj.userDetails[key] === res[0].userClosestTo
-        )
+          (key) => obj.userDetails[key] === res[0].userClosestTo,
+        ),
       );
 
       if (
@@ -76,7 +76,7 @@ const processDistances = (users) => {
             firstLocation[0],
             firstLocation[1],
             secondLocation[0],
-            secondLocation[1]
+            secondLocation[1],
           ),
         });
       }
@@ -99,7 +99,7 @@ const processDistances = (users) => {
  * @description Based on the haversine formula which determines the distance between
  * two points on a sphere. In this case we are using it within the Map.
  */
-const getDistance = (lat1, long1, lat2, long2, unit = 'M') => {
+const getDistance = (lat1, long1, lat2, long2) => {
   // If are in the same locaiton
   if (lat1 == lat2 && long1 == long2) {
     return 0;
@@ -116,14 +116,10 @@ const getDistance = (lat1, long1, lat2, long2, unit = 'M') => {
     }
     dist = Math.acos(dist);
     dist = (dist * 180) / Math.PI;
+
     // Calculate into Miles - 1.1515
     dist = dist * 60 * 1.1515;
-    if (unit == 'K') {
-      dist = dist * 1.609344;
-    }
-    if (unit == 'N') {
-      dist = dist * 0.8684;
-    }
+
     return dist;
   }
 };

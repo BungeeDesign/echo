@@ -23,16 +23,12 @@ export const EchoButton = ({ progress }) => {
   const { setSosAlert, sosAlert } = sosContext;
   const [active, setActive] = useState(false);
   const [userID, setUserID] = useState('');
-  // const [hasFired, setHasfired] = useState(false);
   const pulseAnimation = useRef(null);
 
   useEffect(() => {
     getUser();
-    // run();
-    console.log('Ami i stopping...outeside');
 
     if (!sosAlert) {
-      console.log('Ami i stopping...');
       // Stop the SOS Animation
       setActive(false);
     }

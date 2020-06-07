@@ -1,4 +1,4 @@
-import { SET_SOS_ALERT, SET_ONBOARDED } from '../types';
+import { SET_SOS_ALERT, SET_ONBOARDED, GET_MESSAGES } from '../types';
 
 export default (state, action) => {
   switch (action.type) {
@@ -11,6 +11,11 @@ export default (state, action) => {
       return {
         ...state,
         userOnboarded: action.payload,
+      };
+    case GET_MESSAGES:
+      return {
+        ...state,
+        messages: action.payload,
       };
     default:
       return state;

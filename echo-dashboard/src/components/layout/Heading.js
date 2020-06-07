@@ -31,11 +31,23 @@ const StyledHeading = styled.h2`
     css`
       opacity: 0.5;
     `}
+
+  ${({ right }) =>
+    right &&
+    css`
+      margin-right: 20px;
+    `}
 `;
 
-const Heading = ({ children, small, medium, large, subtle }) => {
+const Heading = ({ children, small, medium, large, subtle, right }) => {
   return (
-    <StyledHeading small={small} medium={medium} large={large} subtle={subtle}>
+    <StyledHeading
+      small={small}
+      medium={medium}
+      large={large}
+      subtle={subtle}
+      right={right}
+    >
       {children}
     </StyledHeading>
   );

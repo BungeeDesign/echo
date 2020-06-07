@@ -8,11 +8,13 @@ import {
   TextInput,
   Keyboard,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import Theme from '../../../constants/Theme';
 import API from '../../../utils/API';
 import { MessageBubble } from '../../../components/Layout/Messages/MessageBubble';
 import { FontAwesome5 } from '@expo/vector-icons';
+import screenLoader from '../../../assets/animations/ui-screen-loader.gif';
 import sosContext from '../../../context/sos/sosContext';
 import { useIsFocused } from '@react-navigation/native';
 
@@ -133,9 +135,12 @@ export default function MessageView({ navigation }) {
 
       {userMessages.length === null ||
         (userMessages.length === 0 && (
-          <Text style={styles.bodyText}>
-            You don't have any messages yet ✉️
-          </Text>
+          <View style={{ flex: 1, justifyContent: 'center' }}>
+            <Image
+              style={{ width: 100, resizeMode: 'contain' }}
+              source={screenLoader}
+            />
+          </View>
         ))}
 
       <View

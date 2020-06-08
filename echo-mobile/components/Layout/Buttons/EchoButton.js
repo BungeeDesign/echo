@@ -59,31 +59,48 @@ export const EchoButton = ({ progress }) => {
       console.log('[Echo Button] - Request Error');
     }
 
-    playAudio();
-  };
+    let soundObject = new Audio.Sound();
+    try {
+      await soundObject.loadAsync(
+        require('../../../assets/audio/sos-alarm.mp3'),
+      );
+      await soundObject.setIsLoopingAsync(true);
+      await soundObject.playAsync();
 
-  const playAudio = async () => {
-    // Play the SOS Audio
-    const soundObject = new Audio.Sound();
-
-    if (active) {
-      try {
-        await soundObject.loadAsync(
-          require('../../../assets/audio/sos-alarm.mp3'),
-        );
-        await soundObject.setIsLoopingAsync(true);
-        await soundObject.playAsync();
-      } catch (error) {
-        console.log('[Audio Error] - SOS audio could not be played.');
-      }
-    } else {
-      try {
+      setTimeout(async () => {
         await soundObject.stopAsync();
-      } catch (error) {
-        console.log('[Audio Error] - SOS audio could not be stopped.');
-      }
+      }, 15000);
+    } catch (error) {
+      console.log('[Audio Error] - SOS audio could not be played.');
     }
   };
+
+  const stopAudio = async () => {
+    // await soundObject.stopAsync();
+  };
+
+  // const playAudio = async () => {
+  //   // Play the SOS Audio
+  //   const soundObject = new Audio.Sound();
+
+  //   if (active) {
+  //     try {
+  //       await soundObject.loadAsync(
+  //         require('../../../assets/audio/sos-alarm.mp3'),
+  //       );
+  //       await soundObject.setIsLoopingAsync(true);
+  //       await soundObject.playAsync();
+  //     } catch (error) {
+  //       console.log('[Audio Error] - SOS audio could not be played.');
+  //     }
+  //   } else {
+  //     try {
+  //       await soundObject.stopAsync();
+  //     } catch (error) {
+  //       console.log('[Audio Error] - SOS audio could not be stopped.');
+  //     }
+  //   }
+  // };
 
   if (active) {
     if (!hasFired) {
@@ -100,7 +117,7 @@ export const EchoButton = ({ progress }) => {
     }
 
     if (!sosAlert) {
-      setActive(false);
+      soundObject = setActive(false);
     }
   }
 

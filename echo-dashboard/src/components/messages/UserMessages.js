@@ -42,6 +42,7 @@ const MessageWrapper = styled.div`
   width: 100%;
   height: 100px;
   margin-top: 100px;
+  z-index: 9999;
 
   form {
     display: grid;

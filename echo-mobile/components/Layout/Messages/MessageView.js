@@ -19,9 +19,6 @@ import sosContext from '../../../context/sos/sosContext';
 import { useIsFocused } from '@react-navigation/native';
 
 export default function MessageView({ navigation }) {
-  // const SosContext = useContext(sosContext);
-  // const { messages, getMessages } = SosContext;
-
   const [userMessages, setUserMessages] = useState([]);
   const [userID, setUserID] = useState('');
   const [hasMessages, setHasMessages] = useState(false);

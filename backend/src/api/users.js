@@ -73,7 +73,7 @@ router.post('/sos', async (req, res, next) => {
 
     const io = req.app.get('io');
     io.emit('sosAlert', req.body);
-    res.json({ done: 'yessss' });
+    res.json({ done: 'complete' });
   } catch (error) {
     if (error.name === 'Validation Error') {
       res.status(422);

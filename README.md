@@ -5,38 +5,35 @@ In an event of a disaster where communicaion is down, Echo can help you to keep 
 
 ### Backend (API)
 
-- [ ] Config Express
-- [ ] Build MongoDB Database
-- [ ] Setup Middlewares
-- [ ] Setup Loggers
-- [ ] Create Services
-- [ ] Integrate Notifications Service (From service like Pusher)
+- [x] Config Express
+- [x] Build MongoDB Database
+- [x] Setup Middlewares
+- [x] Setup Loggers
 
 ### Mobile Application
 
-- [ ] Configure RN App
-- [ ] Create Navigation
-- [ ] Build Custom Nav Bar
-- [ ] Onboarding Screens
-- [ ] Map Component
-- [ ] Recent Messages Component
-- [ ] Alerts/Messages Screen
-- [ ] Levels Screen
-- [ ] Account Screen
-- [ ] Settings Screen
-- [ ] SOS (Echo) Alarm
-- [ ] UI Animations
-- [ ] Microinteractions (Map)
-- [ ] Map Point User UI
-- [ ] User profiles
-- [ ] Level State Component
+- [x] Configure RN App
+- [x] Create Navigation
+- [x] Build Custom Nav Bar
+- [x] Onboarding Screens
+- [x] Map Component
+- [x] Recent Messages Component
+- [x] Alerts/Messages Screen
+- [x] Levels Screen
+- [x] Account Screen
+- [x] SOS (Echo) Alarm
+- [x] UI Animations
+- [x] Microinteractions (Map)
+- [x] Map Point User UI
+- [x] User profiles
+- [x] Level State Component
 
 ### Dashboard
 
-- [ ] User Registration / Login (SAML)
-- [ ] Side Bar Nav
-- [ ] Users Area
-- [ ] Alerts
-- [ ] Emgergancy SOS Echos
-- [ ] Users Map
-- [ ] Messages
+- [x] User Registration / Login (AUTH)
+- [x] Side Bar Nav
+- [x] Users Area
+- [x] Alerts
+- [x] Emgergancy SOS Echos
+- [x] Users Map
+- [x] Messages

@@ -18,6 +18,21 @@ router.get('/', async (req, res, next) => {
 });
 
 /**
+ * @route GET /user
+ * @desc Get user by ID
+ * @access Private
+ */
+router.post('/user', async (req, res, next) => {
+  console.log('Req Body', req.body);
+  try {
+    const user = await User.findById(req.body.userID);
+    res.json([user]);
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
  * @route POST /users
  * @desc Creates a new user
  * @access Public

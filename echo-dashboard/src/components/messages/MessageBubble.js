@@ -11,6 +11,12 @@ const StyledContainer = styled.div`
   border-radius: ${({ theme }) => theme.radius.small};
   background: ${({ theme, type }) =>
     type === 'admin' ? theme.colors.purpleBlue : theme.colors.blue};
+  transition: ease 0.6s;
+
+  &:hover {
+    cursor: pointer;
+    box-shadow: ${({ theme }) => theme.shadow.strong};
+  }
 
   ${({ type }) =>
     type === 'user' &&
@@ -35,9 +41,9 @@ const StyledContainer = styled.div`
   }
 `;
 
-const MessageBubble = ({ type, messageBody }) => {
+const MessageBubble = ({ type, messageBody, toggleForm }) => {
   return (
-    <StyledContainer type={type}>
+    <StyledContainer type={type} onClick={toggleForm}>
       <div className="messageInfo">
         <Heading small subtle right>
           {type === 'admin' ? 'You' : 'User'}

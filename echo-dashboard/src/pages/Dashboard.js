@@ -55,7 +55,7 @@ function Dashboard(props) {
             <SideBarItem logo>
               <Logo />
             </SideBarItem>
-            <SideBarItem>
+            <SideBarItem active>
               <FontAwesomeIcon icon={faChartLine} />
             </SideBarItem>
             <SideBarItem>

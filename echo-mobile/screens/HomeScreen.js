@@ -67,12 +67,6 @@ export default function HomeScreen({ navigation }) {
                   message={messages[0].messages[0].message}
                 />
               </TouchableOpacity>
-              <TouchableOpacity onPress={onMessagePress}>
-                <PreviewBubble
-                  type={messages[0].messages[2].type}
-                  message={messages[0].messages[2].message}
-                />
-              </TouchableOpacity>
             </>
           )}
         </View>

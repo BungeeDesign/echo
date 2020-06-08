@@ -1,5 +1,5 @@
-import React from "react";
-import styled, { css } from "styled-components";
+import React from 'react';
+import styled, { css } from 'styled-components';
 
 const NavBarItem = styled.div`
   display: flex;
@@ -30,10 +30,21 @@ const NavBarItem = styled.div`
         background-color: rgb(255, 255, 255, 0.2);
       }
     `}
+
+  ${({ active }) =>
+    active &&
+    css`
+      opacity: 1;
+      background-color: rgb(255, 255, 255, 0.2);
+    `}
 `;
 
-const SideBarItem = ({ children, logo }) => {
-  return <NavBarItem logo={logo}>{children}</NavBarItem>;
+const SideBarItem = ({ children, logo, active }) => {
+  return (
+    <NavBarItem logo={logo} active={active}>
+      {children}
+    </NavBarItem>
+  );
 };
 
 export default SideBarItem;

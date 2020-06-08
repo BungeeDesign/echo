@@ -21,7 +21,7 @@ export const MessageBubble = ({ type, messageBody }) => {
           <View style={styles.messageTitle}>
             <View style={styles.fromLabel}>
               <Text style={styles.labelText}>
-                {type === 'admin' ? 'Agent' : 'You'}
+                {type === 'admin' ? 'Admin' : 'You'}
               </Text>
             </View>
             <View style={styles.hubLabel}>

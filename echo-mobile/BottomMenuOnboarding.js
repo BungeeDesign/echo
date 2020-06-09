@@ -13,22 +13,28 @@ import OnboardingStack from './navigation/OnboardingStack';
 import SosContext from './context/sos/sosContext';
 
 export default () => {
+  const sosContext = useContext(SosContext);
+  const { userOnboarded } = sosContext;
+
   const Tab = createBottomTabNavigator();
 
   return (
     <>
-      <View
-        style={{
-          position: 'absolute',
-          zIndex: 300,
-          bottom: 5,
-          alignSelf: 'center',
-        }}
-      >
-        <EchoButtonGesture />
-      </View>
+      {userOnboarded && (
+        <View
+          style={{
+            position: 'absolute',
+            zIndex: 300,
+            bottom: 5,
+            alignSelf: 'center',
+          }}
+        >
+          <EchoButtonGesture />
+        </View>
+      )}
       <View style={{ flex: 1, position: 'relative' }}>
         <Tab.Navigator
+          initialRouteName="onboarding"
           tabBar={(props) => (
             <TabBar
               {...props}
@@ -41,8 +47,9 @@ export default () => {
           <Tab.Screen name="font" component={ProfileScreen} />
           <Tab.Screen name="chart-bar" component={StatsScreen} />
           <Tab.Screen name="user-alt" component={ProfileScreen} />
+          <Tab.Screen name="onboarding" component={OnboardingStack} />
         </Tab.Navigator>
-        {useSafeArea().bottom > 0 && (
+        {useSafeArea().bottom > 0 && userOnboarded && (
           <View
             style={{
               height: useSafeArea().bottom,

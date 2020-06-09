@@ -16,6 +16,8 @@ import BottomMenu from './BottomMenu';
 import BottomMenuOnboarding from './BottomMenuOnboarding';
 import SosState from './context/sos/SosState';
 
+console.disableYellowBox = true;
+
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
   const [userOnboarded, setUserOnboarded] = useState(false);
@@ -56,8 +58,8 @@ export default function App(props) {
     }
 
     console.log('App.js Onboarding Storage Value: ', isOnboarded);
-    if (isOnboarded === null) {
-      console.log('Onboarding is false.....');
+    if (isOnboarded === null || isOnboarded === 'false') {
+      console.log('Onboarding is false.....', userOnboarded);
       try {
         await AsyncStorage.setItem('onboarding', 'false');
       } catch (error) {
@@ -76,7 +78,8 @@ export default function App(props) {
         <SafeAreaProvider>
           <SosState>
             <NavigationContainer>
-              {userOnboarded ? <BottomMenu /> : <BottomMenuOnboarding />}
+              {userOnboarded === true && <BottomMenu />}
+              {!userOnboarded && <BottomMenuOnboarding />}
             </NavigationContainer>
           </SosState>
         </SafeAreaProvider>

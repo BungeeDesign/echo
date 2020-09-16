@@ -1,5 +1,8 @@
 # Echo
+
 In an event of a disaster where communicaion is down, Echo can help you to keep in contact with emergancy services and others within your area.
+
+![ECHO COVER](https://i.ibb.co/yq2CM9f/Cover-Page.png)
 
 ## Todo
 
